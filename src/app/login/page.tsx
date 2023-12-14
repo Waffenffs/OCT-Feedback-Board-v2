@@ -1,3 +1,5 @@
+import Authentication from "../components/Authentication";
+
 export default function Login() {
-    return <h1>Hello World! Let's destroy this research.</h1>;
+    return <Authentication mode='login' />;
 }
