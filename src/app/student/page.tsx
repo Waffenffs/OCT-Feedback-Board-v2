@@ -1,3 +1,9 @@
+import Navigation from "../components/ui/Navigation";
+
 export default function Student() {
-    return <h1>Welcome aboard, Student!</h1>;
+    return (
+        <main className='w-screen h-screen bg-slate-200'>
+            <Navigation />
+        </main>
+    );
 }

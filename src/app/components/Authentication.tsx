@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 
 import Link from "next/link";
 
@@ -12,13 +13,37 @@ type TAuthenticationProps = {
 export default function Authentication({ mode }: TAuthenticationProps) {
     const [authenticationEmail, setAuthenticationEmail] = useState("");
     const [authenticationPassword, setAuthenticationPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
+    const router = useRouter();
     const supabase = createClientComponentClient();
 
     const signUp = async () => {
-        // do something here
-        // When user signs up, by default, assign them a student status
-        // Department sign-up will be handled by the admin/in a hidden URL
+        setLoading(true);
+
+        const { data, error } = await supabase.auth.signUp({
+            email: authenticationEmail,
+            password: authenticationPassword,
+            // options: {
+            //     emailRedirectTo: ''
+            // }
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        const { error: accountError } = await supabase.from("accounts").insert([
+            {
+                account_name: data.user?.email,
+                account_type: "Student",
+            },
+        ]);
+
+        if (accountError) throw accountError;
+
+        setLoading(false);
+        router.push("/");
     };
 
     const signIn = async () => {
@@ -30,21 +55,20 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             <form
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
-                className='bg-white shadow-xl rounded'
+                className='bg-white shadow-xl rounded md:w-96'
             >
-                <header className='w-full flex justify-center items-center py-5 bg-blue-400 rounded-t'>
+                <header className='w-full flex justify-center items-center py-5 bg-orange-400 rounded-t'>
                     <h1 className='text-2xl font-bold'>OlivFeedbacks</h1>
                 </header>
 
-                <section className='px-12 py-10'>
+                <section className='px-9 py-16'>
                     <div className='w-full flex flex-col justify-start'>
                         <h3 className='text-slate-400 font-semibold text-xs'>
                             Email
                         </h3>
                         <input
                             type='text'
-                            placeholder='account@olivarezcollegetagaytay.edu.ph'
-                            className='border py-1 px-3 focus:outline-blue-400'
+                            className='border py-1 px-3 focus:outline-blue-400 text-slate-500'
                             name='email'
                             value={authenticationEmail}
                             onChange={(e) =>
@@ -58,7 +82,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         </h3>
                         <input
                             type='password'
-                            className='border py-1 px-3 focus:outline-blue-400'
+                            className='border py-1 px-3 focus:outline-blue-400 text-slate-500'
                             name='password'
                             value={authenticationPassword}
                             onChange={(e) =>
@@ -69,7 +93,10 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
                     <button
                         onClick={() => (mode === "login" ? signIn() : signUp())}
-                        className='font-semibold rounded bg-green-500 text-center w-full py-2 mt-5'
+                        disabled={loading}
+                        className={`font-semibold rounded ${
+                            loading ? "bg-green-600" : "bg-green-500"
+                        } hover:bg-green-600 transition ease-in-out duration-300 text-center w-full py-2 mt-5`}
                     >
                         {mode === "login" ? "Login" : "Register"}
                     </button>
