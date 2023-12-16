@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import Container from "./ui/Container";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import Container from "./ui/Container";
 import Link from "next/link";
 
 type TAuthenticationProps = {
@@ -36,8 +36,9 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
         const { error: accountError } = await supabase.from("accounts").insert([
             {
-                account_name: data.user?.email,
+                account_name: data.user?.email, // Initially assign their email as their account name
                 account_type: "Student",
+                account_uid: data.user?.id, // Their unique identifier
             },
         ]);
 
@@ -48,7 +49,17 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     };
 
     const signIn = async () => {
-        // do something here
+        setLoading(true);
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email: authenticationEmail,
+            password: authenticationPassword,
+        });
+
+        if (error) throw error;
+
+        setLoading(false);
+        router.push("/");
     };
 
     return (
