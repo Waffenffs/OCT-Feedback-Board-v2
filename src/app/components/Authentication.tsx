@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
+import Container from "./ui/Container";
 
 import Link from "next/link";
 
@@ -51,7 +52,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     };
 
     return (
-        <main className='w-screen h-screen flex flex-col justify-center items-center tracking-wide bg-slate-200'>
+        <Container stylings='flex flex-col justify-center items-center tracking-wide'>
             <form
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
@@ -113,6 +114,6 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     </Link>
                 </footer>
             </form>
-        </main>
+        </Container>
     );
 }

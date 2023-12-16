@@ -1,9 +1,18 @@
-import Navigation from "../components/ui/Navigation";
+import SideNavigation from "../components/ui/SideNavigation";
+import UpperNavigation from "../components/ui/UpperNavigation";
+import Container from "../components/ui/Container";
+import StudentFeedbackList from "../components/student/StudentFeedbackList";
 
 export default function Student() {
     return (
-        <main className='w-screen h-screen bg-slate-200'>
-            <Navigation />
-        </main>
+        <Container stylings='flex flex-row'>
+            <SideNavigation />
+            <div className='flex-1 flex flex-col w-full'>
+                <div>
+                    <UpperNavigation />
+                </div>
+                <StudentFeedbackList />
+            </div>
+        </Container>
     );
 }
