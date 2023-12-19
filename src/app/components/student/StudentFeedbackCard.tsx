@@ -1,10 +1,10 @@
+type TFeedbackStatuses = "Pending" | "Resolved" | "Flagged";
+
 type TStudentFeedbackCardProps = {
     feedback_title: string;
     feedback_description: string;
-    feedback_status: "Pending" | "Resolved" | "Flagged";
+    feedback_status: TFeedbackStatuses;
 };
-
-type TFeedbackStatuses = "Pending" | "Resolved" | "Flagged";
 
 export default function StudentFeedbackCard({
     feedback_title,
