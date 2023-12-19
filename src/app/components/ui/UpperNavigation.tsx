@@ -49,7 +49,7 @@ export default function UpperNavigation() {
     };
 
     return (
-        <nav className='w-full bg-white flex-1 flex justify-end items-center tracking-wide shadow text-xs'>
+        <nav className='w-full bg-white flex-1 flex justify-end items-center tracking-wide text-xs border border-b'>
             <section className='flex flex-row items-center gap-6'>
                 <Link
                     href={`/${accountType.toLowerCase()}/notifications`}
