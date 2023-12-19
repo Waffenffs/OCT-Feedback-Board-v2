@@ -45,7 +45,9 @@ export default function StudentFeedbackList() {
         fetchData();
     }, []);
 
-    const studentFeedbackCards = feedbacks?.map((feedback: any) => (
+    if (isLoading) return <>Loading...</>;
+
+    const studentFeedbackCards = feedbacks.map((feedback: any) => (
         <StudentFeedbackCard
             feedback_title={feedback.feedback_title}
             feedback_description={feedback.feedback_description}
@@ -54,14 +56,16 @@ export default function StudentFeedbackList() {
     ));
 
     return (
-        <main className='w-full h-full p-10 overflow-x-hidden overflow-y-auto tracking-wider flex flex-col gap-8'>
+        <main className='w-full h-full p-10 overflow-x-hidden overflow-y-auto flex flex-col gap-8'>
             <header>
-                <h1 className='text-3xl font-bold text-slate-800'>
+                <h1 className='text-3xl font-bold text-slate-900 tracking-wider'>
                     Your Feedbacks
                 </h1>
             </header>
 
-            <section className='flex'>{studentFeedbackCards}</section>
+            <section className='flex flex-col gap-1'>
+                {studentFeedbackCards}
+            </section>
         </main>
     );
 }

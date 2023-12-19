@@ -18,8 +18,8 @@ export default function StudentFeedbackCard({
     };
 
     return (
-        <article className='flex flex-row gap-3 text-slate-700 tracking-wide p-5 bg-white rounded-xl shadow h-52 cursor-pointer hover:-translate-y-3 transition duration-300 ease-in-out'>
-            <div className='w-6 pt-1'>
+        <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow cursor-pointer hover:shadow-md transition duration-300 ease-in-out'>
+            <div className='h-4 w-6 pt-1'>
                 <div
                     className={`rounded shadow ${statusBackgroundColors[feedback_status]}`}
                 >
@@ -29,7 +29,7 @@ export default function StudentFeedbackCard({
 
             <section>
                 <h1 className='font-bold text-lg'>{feedback_title}</h1>
-                <p className='text-sm max-w-xs'>{feedback_description}</p>
+                <p className='text-sm '>{feedback_description}</p>
             </section>
         </article>
     );
