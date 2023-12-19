@@ -88,6 +88,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                             }
                         />
                     </div>
+
                     <div className='w-full flex flex-col justify-start mt-3'>
                         <h3 className='text-slate-400 font-semibold text-xs'>
                             Password

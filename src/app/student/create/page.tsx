@@ -10,6 +10,7 @@ export default function Create() {
     return (
         <Container stylings='flex flex-row'>
             <SideNavigation />
+
             <div className='flex-1 flex flex-col w-full'>
                 <div>
                     <UpperNavigation />

@@ -62,6 +62,7 @@ export default function UpperNavigation() {
                     <h2 className='font-semibold text-zinc-500 blur hover:blur-0 bg-neutral-300 rounded transition duration-300 ease-in-out hover:bg-white'>
                         {accountName}
                     </h2>
+
                     <div className='self-end flex flex-row gap-1 items-center text-zinc-100 px-3 py-1 rounded bg-zinc-400'>
                         {
                             userIcons[

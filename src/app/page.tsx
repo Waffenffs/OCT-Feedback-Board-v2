@@ -19,8 +19,8 @@ export default async function Home() {
 
     if (error) throw error;
 
-    const account_type = data[0].account_type;
+    const account_type: string = data[0].account_type;
 
-    if (account_type === "Student") return redirect("/student");
-    if (account_type === "Department") return redirect("/department");
+    if (account_type !== "Administrator")
+        return redirect(`/${account_type.toLowerCase()}`);
 }
