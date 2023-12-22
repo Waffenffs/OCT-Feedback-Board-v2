@@ -45,7 +45,7 @@ export default function StudentFeedbackList() {
         fetchData();
     }, []);
 
-    if (isLoading) return <>Loading...</>;
+    if (isLoading) return <div className='w-full h-full'>&nbsp;</div>;
 
     const studentFeedbackCards = feedbacks.map((feedback: any) => (
         <StudentFeedbackCard

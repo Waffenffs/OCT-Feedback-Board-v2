@@ -3,6 +3,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import {
     IoHomeOutline,
@@ -22,6 +23,7 @@ export default function SideNavigation() {
         useState<TAccountTypes>("Student");
 
     const router = useRouter();
+    const path = usePathname();
     const supabase = createClientComponentClient();
 
     useEffect(() => {
@@ -48,8 +50,11 @@ export default function SideNavigation() {
         };
 
         fetchData();
-        setCurrentPath(window.location.pathname);
     }, []);
+
+    useEffect(() => {
+        setCurrentPath(path);
+    }, [path]);
 
     const signOut = async () => {
         await supabase.auth.signOut();

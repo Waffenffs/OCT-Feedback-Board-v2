@@ -40,16 +40,25 @@ export default function UpperNavigation() {
         fetchData();
     }, []);
 
-    if (!accountName || !accountType) return <>Loading...</>;
-
     const userIcons = {
         Student: <PiStudentFill />,
         Department: "",
         Administrator: "",
     };
 
+    if (!accountName || !accountType)
+        return (
+            <div className='w-full bg-white flex-1 flex justify-end items-center border border-b'>
+                <div className='flex flex-col gap-3 py-2 pr-3 animate-pulse h-16'>
+                    <div className='h-3 bg-gray-200 rounded-full dark:bg-gray-500 w-32 self-end'></div>
+
+                    <div className='h-3 bg-zinc-200 rounded-full dark:bg-zinc-400 w-24 self-end'></div>
+                </div>
+            </div>
+        );
+
     return (
-        <nav className='w-full bg-white flex-1 flex justify-end items-center tracking-wide text-xs border border-b'>
+        <nav className='w-full h-16 bg-white flex-1 flex justify-end items-center tracking-wide text-xs border border-b'>
             <section className='flex flex-row items-center gap-6'>
                 <Link
                     href={`/${accountType.toLowerCase()}/notifications`}
