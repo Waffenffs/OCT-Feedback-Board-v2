@@ -56,9 +56,10 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             password: authenticationPassword,
         });
 
+        setLoading(false);
+
         if (error) throw error;
 
-        setLoading(false);
         router.push("/");
     };
 
@@ -108,7 +109,9 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         onClick={() => (mode === "login" ? signIn() : signUp())}
                         disabled={loading}
                         className={`font-semibold rounded ${
-                            loading ? "bg-green-600" : "bg-green-500"
+                            loading
+                                ? "bg-green-600 text-slate-200"
+                                : "bg-green-500"
                         } hover:bg-green-600 transition ease-in-out duration-300 text-center w-full py-2 mt-5`}
                     >
                         {mode === "login" ? "Login" : "Register"}

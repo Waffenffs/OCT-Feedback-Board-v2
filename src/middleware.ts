@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
+    // TO-DO:
+    // 1. Only the Administrator, Student, and the referenced Department can access that feedback.
+
     const res = NextResponse.next();
     const supabase = createMiddlewareClient({ req, res });
 

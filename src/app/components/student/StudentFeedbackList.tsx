@@ -45,10 +45,23 @@ export default function StudentFeedbackList() {
         fetchData();
     }, []);
 
-    if (isLoading) return <div className='w-full h-full'>&nbsp;</div>;
+    if (isLoading)
+        return (
+            <main className='w-full h-full p-10 overflow-x-hidden overflow-y-auto flex flex-col gap-8 animate-pulse'>
+                <header className='h-10 bg-zinc-200 rounded-full dark:bg-zinc-400 w-60'></header>
+
+                <section className='flex flex-col gap-1'>
+                    <div className='h-16 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-16 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-16 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-16 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                </section>
+            </main>
+        );
 
     const studentFeedbackCards = feedbacks.map((feedback: any) => (
         <StudentFeedbackCard
+            feedback_id={feedback.feedback_id}
             feedback_title={feedback.feedback_title}
             feedback_description={feedback.feedback_description}
             feedback_status={feedback.feedback_status}

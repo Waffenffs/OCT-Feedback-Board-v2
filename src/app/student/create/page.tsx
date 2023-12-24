@@ -3,9 +3,6 @@
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import SideNavigation from "@/app/components/ui/SideNavigation";
-import UpperNavigation from "@/app/components/ui/UpperNavigation";
-import Container from "@/app/components/ui/Container";
 import FormInput from "@/app/components/ui/FormInput";
 
 type TDepartment = {
