@@ -23,11 +23,17 @@ export default function StudentFeedbackCard({
 
     return (
         <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow hover:shadow-md transition duration-300 ease-in-out'>
-            <div className='h-4 w-6 pt-1'>
+            <div className='h-4 w-6 pt-1 relative'>
                 <div
-                    className={`rounded shadow ${statusBackgroundColors[feedback_status]}`}
+                    className={`group cursor-default rounded shadow ${statusBackgroundColors[feedback_status]}`}
                 >
                     &nbsp;
+                    <div className='cursor-default absolute -translate-x-5 z-10 flex flex-col opacity-0 group-hover:opacity-100 delay-100 transition-opacity'>
+                        <div className='h-3 w-3 origin-bottom-left rotate-45 transform bg-gray-900 self-center'></div>
+                        <div className='whitespace-nowrap py-1 px-2 rounded bg-gray-800 bg-gray-900 text-slate-100 tracking-wide text-xs font-semibold'>
+                            {feedback_status}
+                        </div>
+                    </div>
                 </div>
             </div>
 
