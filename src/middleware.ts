@@ -19,7 +19,7 @@ export async function middleware(req: NextRequest) {
     if (
         req.nextUrl.pathname === "/login" ||
         req.nextUrl.pathname === "/register" ||
-        req.nextUrl.pathname.startsWith("/_next")
+        req.nextUrl.pathname.startsWith("/_next") // To load files and CSS
     ) {
         const res = NextResponse.next();
 
