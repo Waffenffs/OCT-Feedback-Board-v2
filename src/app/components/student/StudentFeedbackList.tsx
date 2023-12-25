@@ -59,14 +59,18 @@ export default function StudentFeedbackList() {
             </main>
         );
 
-    const studentFeedbackCards = feedbacks.map((feedback: any) => (
-        <StudentFeedbackCard
-            feedback_id={feedback.feedback_id}
-            feedback_title={feedback.feedback_title}
-            feedback_description={feedback.feedback_description}
-            feedback_status={feedback.feedback_status}
-        />
-    ));
+    const studentFeedbackCards = feedbacks.map(
+        (feedback: any, index: number) => (
+            <StudentFeedbackCard
+                key={index}
+                feedback_id={feedback.feedback_id}
+                feedback_title={feedback.feedback_title}
+                feedback_description={feedback.feedback_description}
+                feedback_status={feedback.feedback_status}
+                feedback_created_at={feedback.feedback_created_at}
+            />
+        )
+    );
 
     return (
         <main className='w-full h-full p-10 overflow-x-hidden overflow-y-auto flex flex-col gap-8'>

@@ -3,8 +3,28 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-    // TO-DO:
-    // 1. Only the Administrator, Student, and the referenced Department can access that feedback.
+    if (req.nextUrl.pathname.startsWith("/feedback")) {
+        const tokenHeaders = new Headers(req.headers);
+        tokenHeaders.set("x-url", req.url);
+
+        const res = NextResponse.next({
+            request: {
+                headers: tokenHeaders,
+            },
+        });
+
+        return res;
+    }
+
+    if (
+        req.nextUrl.pathname === "/login" ||
+        req.nextUrl.pathname === "/register" ||
+        req.nextUrl.pathname.startsWith("/_next")
+    ) {
+        const res = NextResponse.next();
+
+        return res;
+    }
 
     const res = NextResponse.next();
     const supabase = createMiddlewareClient({ req, res });
@@ -14,15 +34,7 @@ export async function middleware(req: NextRequest) {
         data: { session },
     } = await supabase.auth.getSession();
 
-    if (session) {
-        // User is authenticated
-        return res;
-    }
+    if (!session) return NextResponse.redirect(new URL("/login", req.url));
 
-    // Authentication check failed so redirect user to login
-    return NextResponse.redirect(new URL("/login", req.url));
+    return res;
 }
-
-export const config = {
-    matcher: "/",
-};
