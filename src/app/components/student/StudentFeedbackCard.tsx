@@ -62,13 +62,13 @@ export default function StudentFeedbackCard({
             <section className='flex flex-col justify-start'>
                 <Link
                     href={`/feedback/param?id=${feedback_id}`}
-                    className='font-bold text-lg cursor-pointer'
+                    className='font-bold text-lg cursor-pointer text-black'
                 >
                     {feedback_title}
                 </Link>
                 <p className='text-sm '>{feedback_description}</p>
                 <section className='mt-3'>
-                    <span className='font-semibold tracking-wider text-sm text-slate-600'>
+                    <span className='font-semibold tracking-wider text-sm text-slate-700'>
                         {formattedDate}
                     </span>
                 </section>
