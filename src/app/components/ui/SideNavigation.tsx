@@ -18,7 +18,7 @@ type TAccountTypes = "Student" | "Department" | "Administrator";
 
 export default function SideNavigation() {
     const [currentUser, setCurrentUser] = useState<any>(null);
-    const [currentPath, setCurrentPath] = useState("/student");
+    const [currentPath, setCurrentPath] = useState("");
     const [userAccountType, setUserAccountType] =
         useState<TAccountTypes>("Student");
 
