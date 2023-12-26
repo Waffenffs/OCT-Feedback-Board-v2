@@ -58,7 +58,7 @@ export default function UpperNavigation() {
         );
 
     return (
-        <nav className='w-full h-16 bg-white flex-1 flex justify-end items-center tracking-wide text-xs border border-b'>
+        <nav className='sticky top-0 z-50 w-full h-16 bg-white flex-1 flex justify-end items-center tracking-wide text-xs border border-b'>
             <section className='flex flex-row items-center gap-6'>
                 <Link
                     href={`/${accountType.toLowerCase()}/notifications`}
@@ -68,7 +68,7 @@ export default function UpperNavigation() {
                 </Link>
 
                 <div className='flex flex-col gap-3 py-2 pr-3'>
-                    <h2 className='font-semibold text-zinc-500 blur hover:blur-0 bg-neutral-300 rounded transition duration-300 ease-in-out hover:bg-white'>
+                    <h2 className='font-semibold text-zinc-500'>
                         {accountName}
                     </h2>
 

@@ -66,9 +66,11 @@ export default function StudentFeedbackCard({
                 >
                     {feedback_title}
                 </Link>
-                <p className='text-sm '>{feedback_description}</p>
+                <p className='text-sm text-slate-900 truncate w-[45rem]'>
+                    {feedback_description}
+                </p>
                 <section className='mt-3'>
-                    <span className='font-semibold tracking-wider text-sm text-slate-700'>
+                    <span className='tracking-wider text-sm text-slate-600'>
                         {formattedDate}
                     </span>
                 </section>

@@ -7,14 +7,14 @@ import DashboardLayout from "@/app/components/ui/DashboardLayout";
 
 export async function generateMetadata() {
     const url = new URL(headers().get("x-url")!);
-    const id = url.searchParams.get("id")?.split("/")[0];
+    const feedbackId = url.searchParams.get("id")?.split("/")[0];
 
     const supabase = createServerComponentClient({ cookies });
 
     const { data, error } = await supabase
         .from("feedbacks")
         .select("feedback_title")
-        .eq("feedback_id", id);
+        .eq("feedback_id", feedbackId);
 
     if (error) throw error;
 
