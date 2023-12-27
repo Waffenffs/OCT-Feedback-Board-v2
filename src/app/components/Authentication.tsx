@@ -70,7 +70,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 onSubmit={(e) => e.preventDefault()}
                 className='bg-white shadow-xl rounded md:w-96'
             >
-                <header className='w-full flex justify-center items-center py-5 bg-orange-400 rounded-t'>
+                <header className='w-full flex justify-center items-center py-5 bg-[#1c1c1c] rounded-t'>
                     <h1 className='text-2xl font-bold'>OlivFeedbacks</h1>
                 </header>
 
@@ -81,7 +81,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         </h3>
                         <input
                             type='text'
-                            className='border py-1 px-3 focus:outline-blue-400 text-slate-500'
+                            className='border py-1 px-3 text-slate-500 focus:outline-none focus:ring focus:ring-blue-500 rounded mt-2'
                             name='email'
                             value={authenticationEmail}
                             onChange={(e) =>
@@ -90,13 +90,13 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         />
                     </div>
 
-                    <div className='w-full flex flex-col justify-start mt-3'>
+                    <div className='w-full flex flex-col justify-start mt-5'>
                         <h3 className='text-slate-400 font-semibold text-xs'>
                             Password
                         </h3>
                         <input
                             type='password'
-                            className='border py-1 px-3 focus:outline-blue-400 text-slate-500'
+                            className='border py-1 px-3 text-slate-500 focus:outline-none focus:ring focus:ring-blue-500 rounded mt-2'
                             name='password'
                             value={authenticationPassword}
                             onChange={(e) =>
@@ -110,9 +110,9 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         disabled={loading}
                         className={`font-semibold rounded ${
                             loading
-                                ? "bg-green-600 text-slate-200"
+                                ? "bg-green-700 text-slate-200 border-green-400"
                                 : "bg-green-500"
-                        } hover:bg-green-600 transition ease-in-out duration-300 text-center w-full py-2 mt-5`}
+                        } hover:bg-green-700 hover:text-slate-200 border border-green-500 transition ease-in-out duration-300 text-center w-full py-2 mt-5`}
                     >
                         {mode === "login" ? "Login" : "Register"}
                     </button>

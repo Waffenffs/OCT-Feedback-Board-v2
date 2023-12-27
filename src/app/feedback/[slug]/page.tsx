@@ -28,6 +28,7 @@ type TCreator = {
 type TCombinedData = {
     feedback: TFeedback;
     creator: TCreator;
+    referredDepartment: string;
 };
 
 export default function Feedback() {
@@ -88,9 +89,20 @@ export default function Feedback() {
 
             const creatorData = creator_data[0];
 
+            const { data: referred_department, error: error_two } =
+                await supabase
+                    .from("accounts")
+                    .select("account_name")
+                    .eq("account_id", feedbackData.feedback_reference);
+
+            if (error_two) throw error_two;
+
+            const referredDepartment = referred_department[0].account_name;
+
             setPageData({
                 feedback: feedbackData,
                 creator: creatorData,
+                referredDepartment: referredDepartment,
             });
             setLoading(false);
         };
@@ -132,12 +144,20 @@ export default function Feedback() {
                 <span>{pageData?.feedback.feedback_created_at}</span>
             </header>
 
-            <section className='flex flex-col gap-5 mt-5'>
+            <section className='flex flex-col mt-5'>
                 <h1 className='font-bold text-3xl text-black'>
                     {pageData?.feedback.feedback_title}
                 </h1>
 
-                <p>{pageData?.feedback.feedback_description}</p>
+                <div className='mt-2'>
+                    <span className='tracking-wider text-sm text-slate-600 bg-neutral-200 py-1 px-3 rounded'>
+                        Regarding: {pageData?.referredDepartment}
+                    </span>
+                </div>
+
+                <p className='mt-5'>
+                    {pageData?.feedback.feedback_description}
+                </p>
             </section>
 
             {pageData && (

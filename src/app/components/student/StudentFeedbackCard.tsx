@@ -1,3 +1,8 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import Link from "next/link";
 
 type TFeedbackStatuses = "Pending" | "Resolved" | "Flagged";
@@ -8,6 +13,7 @@ type TStudentFeedbackCardProps = {
     feedback_description: string;
     feedback_status: TFeedbackStatuses;
     feedback_created_at: string;
+    feedback_reference: number;
 };
 
 export default function StudentFeedbackCard({
@@ -16,7 +22,35 @@ export default function StudentFeedbackCard({
     feedback_description,
     feedback_status,
     feedback_created_at,
+    feedback_reference,
 }: TStudentFeedbackCardProps) {
+    const [referredDepartmentName, setReferredDepartmentName] = useState<
+        string | null
+    >(null);
+    const [loadingDepartment, setLoadingDepartment] = useState(true);
+
+    const supabase = createClientComponentClient();
+
+    // feedback_reference === account_id
+
+    useEffect(() => {
+        const fetchDepartmentName = async () => {
+            const { data, error } = await supabase
+                .from("accounts")
+                .select("account_name")
+                .eq("account_id", feedback_reference);
+
+            if (error) throw error;
+
+            const departmentName = data[0].account_name;
+
+            setReferredDepartmentName(departmentName);
+            setLoadingDepartment(false);
+        };
+
+        fetchDepartmentName();
+    }, []);
+
     const statusBackgroundColors: Record<TFeedbackStatuses, string> = {
         Pending: "bg-gradient-to-b from-orange-400 to-orange-600",
         Resolved: "bg-gradient-to-b from-green-500 to-green-600",
@@ -59,7 +93,7 @@ export default function StudentFeedbackCard({
                 </div>
             </div>
 
-            <section className='flex flex-col justify-start'>
+            <section className='flex flex-col justify-start w-full'>
                 <div>
                     <Link
                         href={`/feedback/param?id=${feedback_id}`}
@@ -73,11 +107,21 @@ export default function StudentFeedbackCard({
                     {feedback_description}
                 </p>
 
-                <section className='mt-3'>
-                    <span className='tracking-wider text-sm text-slate-600'>
-                        {formattedDate}
-                    </span>
-                </section>
+                <footer className='mt-8'>
+                    {referredDepartmentName ? (
+                        <span className='tracking-wider text-sm text-slate-600 bg-neutral-200 py-1 px-3 rounded'>
+                            Regarding: {referredDepartmentName}
+                        </span>
+                    ) : (
+                        <div className='h-5 mt-3 bg-zinc-200 rounded dark:bg-zinc-400 w-48 animate-pulse'></div>
+                    )}
+
+                    <section className='mt-2'>
+                        <span className='tracking-wider text-sm text-slate-600'>
+                            {formattedDate}
+                        </span>
+                    </section>
+                </footer>
             </section>
         </article>
     );

@@ -120,13 +120,12 @@ export default function StudentFeedbackList() {
                         <div className='h-5 bg-zinc-200 rounded-full dark:bg-zinc-400 w-16'></div>
                     </header>
 
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
-                    <div className='h-24 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
                 </section>
             </main>
         );
@@ -140,6 +139,7 @@ export default function StudentFeedbackList() {
                 feedback_description={feedback.feedback_description}
                 feedback_status={feedback.feedback_status}
                 feedback_created_at={feedback.feedback_created_at}
+                feedback_reference={feedback.feedback_reference}
             />
         )
     );
