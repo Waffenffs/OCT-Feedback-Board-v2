@@ -81,7 +81,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         </h3>
                         <input
                             type='text'
-                            className='border py-1 px-3 text-slate-500 focus:outline-none focus:ring focus:ring-blue-500 rounded mt-2'
+                            className='border py-1 px-3 text-slate-500 focus:border-blue-500 focus:outline-none rounded mt-2'
                             name='email'
                             value={authenticationEmail}
                             onChange={(e) =>
@@ -96,7 +96,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         </h3>
                         <input
                             type='password'
-                            className='border py-1 px-3 text-slate-500 focus:outline-none focus:ring focus:ring-blue-500 rounded mt-2'
+                            className='border py-1 px-3 text-slate-500 focus:border-blue-500 focus:outline-none rounded mt-2'
                             name='password'
                             value={authenticationPassword}
                             onChange={(e) =>

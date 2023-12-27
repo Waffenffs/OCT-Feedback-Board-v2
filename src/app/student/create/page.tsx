@@ -125,7 +125,7 @@ export default function Create() {
                     </h1>
 
                     <textarea
-                        className='resize-none overflow-y-hidden text-sm border-2 border-slate-300 rounded w-full py-1 px-2 text-slate-800 focus:outline-blue-500'
+                        className='mt-1 resize-none overflow-y-hidden text-sm border-2 border-slate-300 rounded w-full py-1 px-2 text-slate-800 focus:outline-none focus:border-blue-500'
                         placeholder='Ex. Students will benefit highly from this...'
                         name='feedback_description'
                         value={feedbackDescription}

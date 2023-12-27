@@ -23,7 +23,7 @@ export default function FormInput({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 name={name}
-                className='text-sm border-2 border-slate-300 rounded py-1 px-2 focus:outline-blue-500'
+                className='mt-1 text-sm border-2 border-slate-300 rounded py-1 px-2 focus:outline-none focus:border-blue-500'
             />
         </div>
     );
