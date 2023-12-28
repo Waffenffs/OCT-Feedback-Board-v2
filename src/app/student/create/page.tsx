@@ -108,7 +108,7 @@ export default function Create() {
         <main className='w-full h-full overflow-x-hidden overflow-y-auto flex justify-center items-center'>
             <form
                 onSubmit={(e) => handleSubmit(e)}
-                className='flex flex-col gap-3 bg-white rounded shadow p-10 w-[35rem]'
+                className='z-10 flex flex-col gap-3 bg-white rounded shadow p-10 w-[35rem]'
             >
                 <FormInput
                     title='Title'
