@@ -3,19 +3,34 @@ import {
     createMiddlewareClient,
 } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
+
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
     const supabase = createMiddlewareClient({ req, res });
 
+    const {
+        account_id: accountID,
+        account_uid: accountUID,
+        account_type: accountType,
+    } = await fetchUserCredentials(supabase);
+
+    const pathRequiresAccountType: Record<string, string> = {
+        "/department": "Department",
+        "/student": "Student",
+    };
+
+    const requiredAccountType = pathRequiresAccountType[req.nextUrl.pathname];
+
+    if (requiredAccountType && accountType !== requiredAccountType) {
+        return NextResponse.redirect(
+            new URL(`/${accountType?.toLowerCase()}`, req.url)
+        );
+    }
+
     if (req.nextUrl.pathname.startsWith("/feedback")) {
         const feedbackID = getFeedbackIDValue(req.url);
-        const {
-            account_id: accountID,
-            account_uid: accountUID,
-            account_type: accountType,
-        } = await fetchUserCredentials(supabase);
         const {
             feedback_creator_uid: feedbackCreatorUID,
             feedback_reference: feedbackReference,
@@ -44,13 +59,19 @@ export async function middleware(req: NextRequest) {
         }
     }
 
+    if (req.nextUrl.pathname === "/") {
+        if (accountType !== "Administrator") {
+            return NextResponse.redirect(
+                new URL(`/${accountType?.toLowerCase()}`, req.url)
+            );
+        }
+    }
+
     if (
         req.nextUrl.pathname === "/login" ||
         req.nextUrl.pathname === "/register" ||
         req.nextUrl.pathname.startsWith("/_next") // To load files and CSS
     ) {
-        const res = NextResponse.next();
-
         return res;
     }
 
@@ -77,9 +98,11 @@ async function fetchUserCredentials(
     supabase: SupabaseClient<any, "public", any>
 ) {
     const {
-        data: { user },
+        data: { session },
         error: error_one,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getSession();
+
+    const user = session?.user;
 
     if (error_one) throw error_one;
 
@@ -91,9 +114,9 @@ async function fetchUserCredentials(
     if (error_two) throw error_two;
 
     const userCredentials = {
-        account_id: user_credentials[0].account_id,
-        account_uid: user_credentials[0].account_uid,
-        account_type: user_credentials[0].account_type as
+        account_id: user_credentials[0]?.account_id,
+        account_uid: user_credentials[0]?.account_uid,
+        account_type: user_credentials[0]?.account_type as
             | "Department"
             | "Student"
             | "Administrator",
@@ -114,8 +137,8 @@ async function fetchFeedbackCredentials(
     if (error) throw error;
 
     const feedbackCredentials = {
-        feedback_creator_uid: data[0].feedback_creator_uid,
-        feedback_reference: data[0].feedback_reference,
+        feedback_creator_uid: data[0]?.feedback_creator_uid,
+        feedback_reference: data[0]?.feedback_reference,
     };
 
     return feedbackCredentials;

@@ -30,8 +30,14 @@ export default function SideNavigation() {
         const fetchData = async () => {
             try {
                 const {
-                    data: { user },
-                } = await supabase.auth.getUser();
+                    data: { session },
+                    error,
+                } = await supabase.auth.getSession();
+
+                if (error) throw error;
+
+                const user = session?.user;
+
                 setCurrentUser(user);
 
                 const { data: accountData } = await supabase
@@ -57,7 +63,9 @@ export default function SideNavigation() {
     }, [path]);
 
     const signOut = async () => {
-        await supabase.auth.signOut();
+        const { error } = await supabase.auth.signOut();
+
+        if (error) throw error;
 
         router.replace("/login");
     };
