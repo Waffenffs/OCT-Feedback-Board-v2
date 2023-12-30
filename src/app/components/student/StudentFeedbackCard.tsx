@@ -31,8 +31,6 @@ export default function StudentFeedbackCard({
 
     const supabase = createClientComponentClient();
 
-    // feedback_reference === account_id
-
     useEffect(() => {
         const fetchDepartmentName = async () => {
             const { data, error } = await supabase

@@ -16,7 +16,7 @@ export async function generateMetadata() {
         .select("feedback_title")
         .eq("feedback_id", feedbackId);
 
-    if (error) throw error;
+    if (error) throw `Origin app/feedback/[slug]/layout.tsx >>: ${error}`;
 
     const feedbackTitle = data[0].feedback_title;
 

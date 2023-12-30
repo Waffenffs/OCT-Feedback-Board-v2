@@ -21,14 +21,15 @@ export default function StudentFeedbackList() {
 
     const fetchData = async () => {
         try {
-            // Fetch user's email
             const {
-                data: { user },
-                error: userError,
-            } = await supabase.auth.getUser();
+                data: { session },
+                error: session_error,
+            } = await supabase.auth.getSession();
 
-            if (userError) throw userError;
+            if (session_error)
+                throw `Origin app/components/students/StudentFeedbackList.tsx >>: ${session_error}`;
 
+            const user = session?.user;
             const userUID = user?.id;
 
             // Fetch user's feedbacks

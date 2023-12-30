@@ -34,7 +34,8 @@ export default function SideNavigation() {
                     error,
                 } = await supabase.auth.getSession();
 
-                if (error) throw error;
+                if (error)
+                    throw `Origin app/components/ui/SideNavigation.tsx >>: ${error}`;
 
                 const user = session?.user;
 
@@ -65,7 +66,8 @@ export default function SideNavigation() {
     const signOut = async () => {
         const { error } = await supabase.auth.signOut();
 
-        if (error) throw error;
+        if (error)
+            throw `Origin app/components/ui/SideNavigation.tsx >>: ${error}`;
 
         router.replace("/login");
     };

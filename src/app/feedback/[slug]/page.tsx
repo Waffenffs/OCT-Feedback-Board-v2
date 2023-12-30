@@ -32,11 +32,6 @@ type TCombinedData = {
 };
 
 export default function Feedback() {
-    // FEATURES_TO_IMPLEMENT:
-    // 1. Creator can make it public/private to other students
-    // 2. Only the administrator, creator, and the department can access this feedback.
-    // --- > Unless it is public. Feedbacks are private by default
-
     const [pageData, setPageData] = useState<TCombinedData | null>(null);
     const [loading, setLoading] = useState(true);
 

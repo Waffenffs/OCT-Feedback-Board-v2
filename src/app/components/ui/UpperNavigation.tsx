@@ -18,8 +18,15 @@ export default function UpperNavigation() {
         const fetchData = async () => {
             try {
                 const {
-                    data: { user },
-                } = await supabase.auth.getUser();
+                    data: { session },
+                    error: session_error,
+                } = await supabase.auth.getSession();
+
+                if (session_error)
+                    throw `Origin app/components/ui/UpperNavigation.tsx >>: ${session_error}`;
+
+                const user = session?.user;
+
                 setAccountName(user?.email as string);
 
                 const { data: accountData } = await supabase

@@ -33,11 +33,14 @@ export default function Create() {
         )[0];
 
         const {
-            data: { user },
-            error: userError,
-        } = await supabase.auth.getUser();
+            data: { session },
+            error: session_error,
+        } = await supabase.auth.getSession();
 
-        if (userError) throw userError;
+        if (session_error)
+            throw `Origin student/create/page.tsx >> ${session_error}`;
+
+        const user = session?.user;
 
         const userUID = user?.id;
 
