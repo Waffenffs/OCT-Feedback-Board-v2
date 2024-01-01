@@ -10,6 +10,7 @@ type TFormInputProps = {
 export default function FormInput({
     title,
     placeholder,
+    type,
     value,
     onChange,
     name,
@@ -18,7 +19,7 @@ export default function FormInput({
         <div className='w-full flex flex-col gap-1 justify-start text-slate-800'>
             <h1 className='font-semibold tracking-wide'>{title}</h1>
             <input
-                type='text'
+                type={type}
                 placeholder={placeholder !== undefined ? placeholder : ""}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
