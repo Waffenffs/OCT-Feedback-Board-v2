@@ -6,14 +6,22 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import Container from "./ui/Container";
 import Link from "next/link";
+import FormInput from "./ui/FormInput";
+
+type TModes = "login" | "registration" | "department-registration";
 
 type TAuthenticationProps = {
-    mode: "login" | "registration";
+    mode: TModes;
 };
 
 export default function Authentication({ mode }: TAuthenticationProps) {
+    // Sample department acocunt:
+    // octmarketingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
+    // password: latenightattentions
+
     const [authenticationEmail, setAuthenticationEmail] = useState("");
     const [authenticationPassword, setAuthenticationPassword] = useState("");
+    const [departmentName, setDepartmentName] = useState("");
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
@@ -34,15 +42,46 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             throw error;
         }
 
-        const { error: accountError } = await supabase.from("accounts").insert([
-            {
-                account_name: data.user?.email, // Initially assign their email as their account name
-                account_type: "Student",
-                account_uid: data.user?.id, // Their unique identifier
-            },
-        ]);
+        const { error: account_error } = await supabase
+            .from("accounts")
+            .insert([
+                {
+                    account_name: data.user?.email, // Initially assign their email as their account name
+                    account_type: "Student",
+                    account_uid: data.user?.id, // Their unique identifier
+                },
+            ]);
 
-        if (accountError) throw accountError;
+        if (account_error)
+            throw `Origin app/components/Authentication.tsx >>: ${account_error}`;
+
+        setLoading(false);
+        router.push("/");
+    };
+
+    const departmentSignUp = async () => {
+        setLoading(true);
+
+        const { data, error: signup_error } = await supabase.auth.signUp({
+            email: authenticationEmail,
+            password: authenticationPassword,
+        });
+
+        if (signup_error)
+            throw `Origin app/components/Authentication.tsx >>: ${signup_error}`;
+
+        const { error: account_error } = await supabase
+            .from("accounts")
+            .insert([
+                {
+                    account_name: departmentName,
+                    account_type: "Department",
+                    account_uid: data.user?.id,
+                },
+            ]);
+
+        if (account_error)
+            throw `Origin app/components/Authentication.tsx >>: ${account_error}`;
 
         setLoading(false);
         router.push("/");
@@ -58,9 +97,16 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
         setLoading(false);
 
-        if (error) throw error;
+        if (error)
+            throw `Origin app/components/Authentication.tsx >>: ${error}`;
 
         router.push("/");
+    };
+
+    const authActions: Record<TModes, () => Promise<void>> = {
+        login: () => signIn(),
+        registration: () => signUp(),
+        "department-registration": () => departmentSignUp(),
     };
 
     return (
@@ -74,39 +120,38 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     <h1 className='text-2xl font-bold'>OlivFeedbacks</h1>
                 </header>
 
-                <section className='px-9 py-16'>
-                    <div className='w-full flex flex-col justify-start'>
-                        <h3 className='text-slate-400 font-semibold text-xs'>
-                            Email
-                        </h3>
-                        <input
+                <section className='flex flex-col gap-3 px-9 py-16'>
+                    {mode === "department-registration" && (
+                        <FormInput
+                            title='Department Name'
+                            placeholder=''
                             type='text'
-                            className='border py-1 px-3 text-slate-500 focus:border-blue-500 focus:outline-none rounded mt-2'
-                            name='email'
-                            value={authenticationEmail}
-                            onChange={(e) =>
-                                setAuthenticationEmail(e.target.value)
-                            }
+                            name='department-name'
+                            value={departmentName}
+                            onChange={setDepartmentName}
                         />
-                    </div>
+                    )}
 
-                    <div className='w-full flex flex-col justify-start mt-5'>
-                        <h3 className='text-slate-400 font-semibold text-xs'>
-                            Password
-                        </h3>
-                        <input
-                            type='password'
-                            className='border py-1 px-3 text-slate-500 focus:border-blue-500 focus:outline-none rounded mt-2'
-                            name='password'
-                            value={authenticationPassword}
-                            onChange={(e) =>
-                                setAuthenticationPassword(e.target.value)
-                            }
-                        />
-                    </div>
+                    <FormInput
+                        title='Email'
+                        placeholder=''
+                        type='email'
+                        name='email'
+                        value={authenticationEmail}
+                        onChange={setAuthenticationEmail}
+                    />
+
+                    <FormInput
+                        title='Password'
+                        placeholder=''
+                        type='password'
+                        name='password'
+                        value={authenticationPassword}
+                        onChange={setAuthenticationPassword}
+                    />
 
                     <button
-                        onClick={() => (mode === "login" ? signIn() : signUp())}
+                        onClick={() => authActions[mode]()}
                         disabled={loading}
                         className={`font-semibold rounded ${
                             loading
