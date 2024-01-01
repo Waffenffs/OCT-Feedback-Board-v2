@@ -27,16 +27,22 @@ export default function UpperNavigation() {
 
                 const user = session?.user;
 
-                setAccountName(user?.email as string);
-
                 const { data: accountData } = await supabase
                     .from("accounts")
-                    .select("account_type")
-                    .eq("account_name", user?.email);
+                    .select("account_type, account_name")
+                    .eq("account_uid", user?.id);
+
+                let accountCredentials;
 
                 if (accountData && accountData.length > 0) {
-                    setAccountType(accountData[0].account_type);
+                    accountCredentials = {
+                        userAccountType: accountData[0].account_type,
+                        userAccountName: accountData[0].account_name,
+                    };
                 }
+
+                setAccountName(accountCredentials?.userAccountName);
+                setAccountType(accountCredentials?.userAccountType);
             } catch (error) {
                 console.error(
                     `Error fetching data for upper navigation: ${error}`

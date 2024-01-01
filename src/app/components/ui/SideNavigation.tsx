@@ -11,6 +11,7 @@ import {
     IoLogOutOutline,
     IoCreateOutline,
 } from "react-icons/io5";
+import { LuLayoutDashboard } from "react-icons/lu";
 
 import Link from "next/link";
 
@@ -20,7 +21,7 @@ export default function SideNavigation() {
     const [currentUser, setCurrentUser] = useState<any>(null);
     const [currentPath, setCurrentPath] = useState("");
     const [userAccountType, setUserAccountType] =
-        useState<TAccountTypes>("Student");
+        useState<TAccountTypes | null>(null);
 
     const router = useRouter();
     const path = usePathname();
@@ -44,11 +45,15 @@ export default function SideNavigation() {
                 const { data: accountData } = await supabase
                     .from("accounts")
                     .select("account_type")
-                    .eq("account_name", user?.email);
+                    .eq("account_uid", user?.id);
+
+                let userAccountType;
 
                 if (accountData && accountData.length > 0) {
-                    setUserAccountType(accountData[0].account_type);
+                    userAccountType = accountData[0].account_type;
                 }
+
+                setUserAccountType(userAccountType);
             } catch (error) {
                 console.error(
                     `Error fetching user data for navigation: ${error}`
@@ -90,7 +95,18 @@ export default function SideNavigation() {
                 icon: <IoCreateOutline />,
             },
         ],
-        Department: [],
+        Department: [
+            {
+                href: "/department",
+                label: "Dashboard",
+                icon: <LuLayoutDashboard />,
+            },
+            {
+                href: "/department/settings",
+                label: "Settings",
+                icon: <IoSettingsOutline />,
+            },
+        ],
         Administrator: [],
     };
 
@@ -110,28 +126,30 @@ export default function SideNavigation() {
                 </div>
 
                 <ul className='hidden md:flex flex-col gap-4 w-full justify-center items-center py-5 text-xl font-semibold'>
-                    {links[userAccountType].map((link, index) => {
-                        const isCurrentActivePath = currentPath === link.href;
+                    {userAccountType &&
+                        links[userAccountType].map((link, index) => {
+                            const isCurrentActivePath =
+                                currentPath === link.href;
 
-                        return (
-                            <Link
-                                key={index}
-                                href={link.href}
-                                className={`flex flex-row items-center px-3 py-2 gap-1 ${
-                                    isCurrentActivePath
-                                        ? "bg-zinc-700 text-white hover:bg-zinc-800 hover:text-white"
-                                        : "hover:bg-zinc-700 hover:text-white"
-                                } text-neutral-500 transition duration-200 ease-in-out w-28 rounded`}
-                            >
-                                <div className='flex-grow flex flex-row items-center gap-2'>
-                                    {link.icon}
-                                    <span className='text-xs'>
-                                        {link.label}
-                                    </span>
-                                </div>
-                            </Link>
-                        );
-                    })}
+                            return (
+                                <Link
+                                    key={index}
+                                    href={link.href}
+                                    className={`flex flex-row items-center px-3 py-2 gap-1 ${
+                                        isCurrentActivePath
+                                            ? "bg-zinc-700 text-white hover:bg-zinc-800 hover:text-white"
+                                            : "hover:bg-zinc-700 hover:text-white"
+                                    } text-neutral-500 transition duration-200 ease-in-out w-28 rounded`}
+                                >
+                                    <div className='flex-grow flex flex-row items-center gap-2'>
+                                        {link.icon}
+                                        <span className='text-xs'>
+                                            {link.label}
+                                        </span>
+                                    </div>
+                                </Link>
+                            );
+                        })}
                 </ul>
             </div>
 
