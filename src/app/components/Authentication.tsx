@@ -42,13 +42,18 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             throw error;
         }
 
+        const userCreds = {
+            email: data.user?.email,
+            uid: data.user?.id,
+        };
+
         const { error: account_error } = await supabase
             .from("accounts")
             .insert([
                 {
-                    account_name: data.user?.email, // Initially assign their email as their account name
+                    account_name: userCreds.email, // Initially assign their email as their account name
                     account_type: "Student",
-                    account_uid: data.user?.id, // Their unique identifier
+                    account_uid: userCreds.uid, // Their unique identifier
                 },
             ]);
 
@@ -70,13 +75,15 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         if (signup_error)
             throw `Origin app/components/Authentication.tsx >>: ${signup_error}`;
 
+        const userUID = data.user?.id;
+
         const { error: account_error } = await supabase
             .from("accounts")
             .insert([
                 {
                     account_name: departmentName,
                     account_type: "Department",
-                    account_uid: data.user?.id,
+                    account_uid: userUID,
                 },
             ]);
 
