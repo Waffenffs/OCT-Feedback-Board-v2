@@ -2,7 +2,7 @@ import FeedbackStatsOverview from "../components/department/FeedbackStatsOvervie
 
 export default function Department() {
     return (
-        <main className='w-full h-full'>
+        <main className='w-full h-full p-10'>
             <FeedbackStatsOverview />
         </main>
     );

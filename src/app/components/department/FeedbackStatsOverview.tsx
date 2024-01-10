@@ -49,18 +49,13 @@ export default function FeedbackStatsOverview() {
             if (feedback_error)
                 throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${feedback_error}`;
 
-            let statusCounts = {
+            let statusCounts: Record<TFeedbackStatus, number> = {
                 Pending: 0,
                 Resolved: 0,
                 Flagged: 0,
             };
             feedback_status.forEach((feedback) => {
-                statusCounts[
-                    feedback.feedback_status as
-                        | "Pending"
-                        | "Resolved"
-                        | "Flagged"
-                ]++;
+                statusCounts[feedback.feedback_status as TFeedbackStatus]++;
             });
             setFeedbackCounts({ ...statusCounts });
 
@@ -68,13 +63,30 @@ export default function FeedbackStatsOverview() {
         };
 
         fetchFeedbackStatuses();
+
+        // console.log(feedbackCounts);
     }, []);
+
+    console.log(feedbackCounts);
 
     if (isLoading) return <>Loading...</>;
 
     return (
-        <header>
-            <article></article>
+        <header className='w-full flex justify-center items-center gap-10'>
+            <article className='w-44 flex flex-col items-center gap-1 bg-gradient-to-b from-orange-400 to-orange-600 shadow py-4 rounded transition duration-200 hover:shadow-xl'>
+                <h1 className='font-bold text-lg tracking-wider'>Pending</h1>
+                <span>{feedbackCounts["Pending"]}</span>
+            </article>
+
+            <article className='w-44 flex flex-col items-center gap-1 bg-gradient-to-b from-green-500 to-green-600 shadow py-4 rounded transition duration-200 hover:shadow-xl'>
+                <h1 className='font-bold text-lg tracking-wider'>Resolved</h1>
+                <span>{feedbackCounts["Resolved"]}</span>
+            </article>
+
+            <article className='w-44 flex flex-col items-center gap-1 bg-gradient-to-b from-red-500 to-red-600 shadow py-4 rounded transition duration-200 hover:shadow-xl'>
+                <h1 className='font-bold text-lg tracking-wider'>Flagged</h1>
+                <span>{feedbackCounts["Flagged"]}</span>
+            </article>
         </header>
     );
 }
