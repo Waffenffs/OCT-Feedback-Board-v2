@@ -63,30 +63,30 @@ export default function FeedbackStatsOverview() {
         };
 
         fetchFeedbackStatuses();
-
-        // console.log(feedbackCounts);
     }, []);
-
-    console.log(feedbackCounts);
 
     if (isLoading) return <>Loading...</>;
 
+    const overviewCardsColors: Record<TFeedbackStatus, string> = {
+        Pending: "bg-gradient-to-b from-orange-400 to-orange-600",
+        Resolved: "bg-gradient-to-b from-green-500 to-green-600",
+        Flagged: "bg-gradient-to-b from-red-500 to-red-600",
+    };
+
+    const overviewCards = ["Pending", "Resolved", "Flagged"].map((status) => (
+        <article
+            className={`${
+                overviewCardsColors[status as TFeedbackStatus]
+            } w-44 flex flex-col items-center gap-1 shadow py-4 rounded transition duration-200 hover:shadow-xl`}
+        >
+            <h1 className='font-bold text-lg tracking-wider'>{status}</h1>
+            <span>{feedbackCounts[status as TFeedbackStatus]}</span>
+        </article>
+    ));
+
     return (
         <header className='w-full flex justify-center items-center gap-10'>
-            <article className='w-44 flex flex-col items-center gap-1 bg-gradient-to-b from-orange-400 to-orange-600 shadow py-4 rounded transition duration-200 hover:shadow-xl'>
-                <h1 className='font-bold text-lg tracking-wider'>Pending</h1>
-                <span>{feedbackCounts["Pending"]}</span>
-            </article>
-
-            <article className='w-44 flex flex-col items-center gap-1 bg-gradient-to-b from-green-500 to-green-600 shadow py-4 rounded transition duration-200 hover:shadow-xl'>
-                <h1 className='font-bold text-lg tracking-wider'>Resolved</h1>
-                <span>{feedbackCounts["Resolved"]}</span>
-            </article>
-
-            <article className='w-44 flex flex-col items-center gap-1 bg-gradient-to-b from-red-500 to-red-600 shadow py-4 rounded transition duration-200 hover:shadow-xl'>
-                <h1 className='font-bold text-lg tracking-wider'>Flagged</h1>
-                <span>{feedbackCounts["Flagged"]}</span>
-            </article>
+            {overviewCards}
         </header>
     );
 }
