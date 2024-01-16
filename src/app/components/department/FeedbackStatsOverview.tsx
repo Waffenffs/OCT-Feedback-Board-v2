@@ -85,20 +85,25 @@ export default function FeedbackStatsOverview() {
         },
     };
 
-    const overviewCards = ["Pending", "Resolved", "Flagged"].map((status) => (
-        <article
-            className={`${
-                overviewCardsColors[status as TFeedbackStatus].article
-            } w-full px-3 py-4 flex flex-col items-center gap-2 shadow rounded transition duration-200 hover:shadow-xl`}
-        >
-            <h1 className='font-semibold tracking-wider text-xl'>{status}</h1>
-            <span
-                className={`text-white text-xl flex justify-center items-center font-bold `}
+    const overviewCards = ["Pending", "Resolved", "Flagged"].map(
+        (status, index) => (
+            <article
+                key={index}
+                className={`${
+                    overviewCardsColors[status as TFeedbackStatus].article
+                } w-full px-3 py-4 flex flex-col items-center gap-2 shadow rounded transition duration-200 hover:shadow-xl`}
             >
-                {feedbackCounts[status as TFeedbackStatus]}
-            </span>
-        </article>
-    ));
+                <h1 className='font-semibold tracking-wider text-xl'>
+                    {status}
+                </h1>
+                <span
+                    className={`text-white text-xl flex justify-center items-center font-bold `}
+                >
+                    {feedbackCounts[status as TFeedbackStatus]}
+                </span>
+            </article>
+        )
+    );
 
     return (
         <header className='w-full flex justify-around items-center gap-3'>

@@ -165,8 +165,6 @@ export default function Create() {
                                     {department.account_name}
                                 </option>
                             ))}
-
-                        <option value={1}>Testing</option>
                     </select>
 
                     <div className='pt-8 flex justify-end'>
