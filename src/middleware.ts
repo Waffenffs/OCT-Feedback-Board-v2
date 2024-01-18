@@ -103,9 +103,7 @@ function getFeedbackIDValue(url: string) {
     return idValue;
 }
 
-async function fetchUserCredentials(
-    supabase: SupabaseClient<any, "public", any>
-) {
+async function fetchUserCredentials(supabase: SupabaseClient) {
     const {
         data: { session },
         error: error_one,
@@ -135,7 +133,7 @@ async function fetchUserCredentials(
 }
 
 async function fetchFeedbackCredentials(
-    supabase: SupabaseClient<any, "public", any>,
+    supabase: SupabaseClient,
     feedbackID: number
 ) {
     const { data, error } = await supabase
