@@ -5,12 +5,9 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import FormInput from "@/app/components/ui/FormInput";
 
-type TDepartment = {
-    account_id: number;
-    account_name: string;
-    account_type: "Department";
-    account_uid: string;
-};
+import { getUserInfo } from "@/app/utils/supabaseUtils";
+
+type TDepartment = TUser & { account_type: "Department" };
 
 export default function Create() {
     const [feedbackTitle, setFeedbackTitle] = useState("");
@@ -32,23 +29,13 @@ export default function Create() {
             (department) => department.account_id === selectedDepartmentID
         )[0];
 
-        const {
-            data: { session },
-            error: session_error,
-        } = await supabase.auth.getSession();
-
-        if (session_error)
-            throw `Origin student/create/page.tsx >> ${session_error}`;
-
-        const user = session?.user;
-
-        const userUID = user?.id;
+        const { user } = await getUserInfo(supabase);
 
         const { error: submissionError } = await supabase
             .from("feedbacks")
             .insert({
                 feedback_reference: selectedDepartment?.account_id,
-                feedback_creator_uid: userUID,
+                feedback_creator_uid: user?.id,
                 feedback_title: feedbackTitle,
                 feedback_description: feedbackDescription,
                 feedback_status: "Pending", // Pending by default

@@ -7,15 +7,11 @@ import FeedbackStatsOverview from "../components/department/FeedbackStatsOvervie
 import StatusSection from "../components/department/StatusSection";
 import DepartmentFeedbackCard from "../components/department/DepartmentFeedbackCard";
 
-export type TFeedback = {
-    feedback_created_at: string;
-    feedback_creator_uid: string;
-    feedback_description: string;
-    feedback_id: string;
-    feedback_reference: string;
-    feedback_status: "Pending" | "Resolved" | "Flagged";
-    feedback_title: string;
-};
+import {
+    getUserInfo,
+    getAccountInfoWithUID,
+    getReferencedFeedbacks,
+} from "../utils/supabaseUtils";
 
 export default function Department() {
     const [feedbacks, setFeedbacks] = useState<any | null>(null);
@@ -25,36 +21,16 @@ export default function Department() {
 
     useEffect(() => {
         const fetchDepartmentFeedbacks = async () => {
-            const {
-                data: { session },
-                error,
-            } = await supabase.auth.getSession();
+            const { user } = await getUserInfo(supabase);
 
-            if (error)
-                throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${error}`;
+            const account = await getAccountInfoWithUID(supabase, user?.id!);
 
-            const user = session?.user;
-            const userUID = user?.id;
+            const retrievedFeedbacks = await getReferencedFeedbacks(
+                supabase,
+                account?.account_id!
+            );
 
-            const { data: accountData, error: accountError } = await supabase
-                .from("accounts")
-                .select("account_id")
-                .eq("account_uid", userUID);
-
-            if (accountError)
-                throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${accountError}`;
-
-            const accountID = accountData[0].account_id;
-
-            const { data: feedback, error: feedbackFetchError } = await supabase
-                .from("feedbacks")
-                .select("*")
-                .eq("feedback_reference", accountID);
-
-            if (feedbackFetchError)
-                throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${feedbackFetchError}`;
-
-            setFeedbacks(feedback);
+            setFeedbacks(retrievedFeedbacks);
             setLoading(false);
         };
 

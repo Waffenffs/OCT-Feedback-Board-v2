@@ -1,5 +1,5 @@
 type TStatusSectionProps = {
-    status: "Pending" | "Resolved" | "Flagged";
+    status: TFeedbackStatus;
     marginTop: number;
 };
 

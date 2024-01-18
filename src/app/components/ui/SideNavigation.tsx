@@ -15,13 +15,14 @@ import { LuLayoutDashboard } from "react-icons/lu";
 
 import Link from "next/link";
 
-type TAccountTypes = "Student" | "Department" | "Administrator";
+import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
 
 export default function SideNavigation() {
     const [currentUser, setCurrentUser] = useState<any>(null);
     const [currentPath, setCurrentPath] = useState("");
-    const [userAccountType, setUserAccountType] =
-        useState<TAccountTypes | null>(null);
+    const [userAccountType, setUserAccountType] = useState<TAccountType | null>(
+        null
+    );
 
     const router = useRouter();
     const path = usePathname();
@@ -30,30 +31,18 @@ export default function SideNavigation() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const {
-                    data: { session },
-                    error,
-                } = await supabase.auth.getSession();
-
-                if (error)
-                    throw `Origin app/components/ui/SideNavigation.tsx >>: ${error}`;
-
-                const user = session?.user;
+                const { user } = await getUserInfo(supabase);
 
                 setCurrentUser(user);
 
-                const { data: accountData } = await supabase
-                    .from("accounts")
-                    .select("account_type")
-                    .eq("account_uid", user?.id);
+                const accountInfo = await getAccountInfoWithUID(
+                    supabase,
+                    user?.id!
+                );
 
-                let userAccountType;
+                const accountType = accountInfo?.account_type;
 
-                if (accountData && accountData.length > 0) {
-                    userAccountType = accountData[0].account_type;
-                }
-
-                setUserAccountType(userAccountType);
+                setUserAccountType(accountType!);
             } catch (error) {
                 console.error(
                     `Error fetching user data for navigation: ${error}`

@@ -1,42 +1,22 @@
-import type { TFeedback } from "@/app/department/page";
-import type { TFeedbackStatuses } from "../student/StudentFeedbackCard";
-
 import Link from "next/link";
 
+import {
+    getFormattedDate,
+    getStatusBackgroundColor,
+} from "@/app/utils/helperUtils";
+
 export default function DepartmentFeedbackCard(props: TFeedback) {
-    const statusBackgroundColors: Record<TFeedbackStatuses, string> = {
-        Pending: "bg-gradient-to-b from-orange-400 to-orange-600",
-        Resolved: "bg-gradient-to-b from-green-500 to-green-600",
-        Flagged: "bg-gradient-to-b from-red-500 to-red-600",
-    };
+    const statusBackgroundColor = getStatusBackgroundColor(
+        props.feedback_status
+    );
 
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ];
-
-    const feedbackTimestamp = new Date(props.feedback_created_at);
-    const formattedDate = `Created at ${
-        months[feedbackTimestamp.getMonth()]
-    } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
+    const formattedDate = getFormattedDate(props.feedback_created_at);
 
     return (
         <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow hover:shadow-md transition duration-300 ease-in-out'>
             <div className='h-4 w-6 pt-1 relative'>
                 <div
-                    className={`group cursor-default rounded shadow ${
-                        statusBackgroundColors[props.feedback_status]
-                    }`}
+                    className={`group cursor-default rounded shadow ${statusBackgroundColor}`}
                 >
                     &nbsp;
                     <div className='cursor-default absolute -translate-x-5 z-10 flex flex-col opacity-0 group-hover:opacity-100 delay-100 transition-opacity'>

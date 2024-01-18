@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-type TFeedbackStatus = "Pending" | "Resolved" | "Flagged";
+import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+import { getStatusBackgroundColor } from "@/app/utils/helperUtils";
 
 export default function FeedbackStatsOverview() {
     const supabase = createClientComponentClient();
@@ -19,32 +20,21 @@ export default function FeedbackStatsOverview() {
 
     useEffect(() => {
         const fetchFeedbackStatuses = async () => {
-            const {
-                data: { session },
-                error,
-            } = await supabase.auth.getSession();
+            const { user } = await getUserInfo(supabase);
 
-            if (error)
-                throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${error}`;
+            if (!user) return console.error("User does not exist!");
 
-            const userUID = session?.user.id;
-            const { data, error: account_error } = await supabase
-                .from("accounts")
-                .select("account_id")
-                .eq("account_uid", userUID);
+            const userUID = user?.id;
 
-            if (account_error)
-                throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${account_error}`;
+            const accountInfo = await getAccountInfoWithUID(supabase, userUID);
 
-            let userID;
-            if (data) {
-                userID = data[0].account_id;
-            }
+            let accountID = accountInfo?.account_id;
+
             const { data: feedback_status, error: feedback_error } =
                 await supabase
                     .from("feedbacks")
                     .select("feedback_status")
-                    .eq("feedback_reference", userID);
+                    .eq("feedback_reference", accountID);
 
             if (feedback_error)
                 throw `Origin components/department/FeedbackStatsOverview.tsx >>: ${feedback_error}`;
@@ -54,11 +44,12 @@ export default function FeedbackStatsOverview() {
                 Resolved: 0,
                 Flagged: 0,
             };
+
             feedback_status.forEach((feedback) => {
                 statusCounts[feedback.feedback_status as TFeedbackStatus]++;
             });
-            setFeedbackCounts({ ...statusCounts });
 
+            setFeedbackCounts({ ...statusCounts });
             setIsLoading(false);
         };
 
@@ -67,42 +58,28 @@ export default function FeedbackStatsOverview() {
 
     if (isLoading) return <>Loading...</>;
 
-    const overviewCardsColors: Record<
-        TFeedbackStatus,
-        Record<string, string>
-    > = {
-        Pending: {
-            article: "bg-gradient-to-b from-orange-400 to-orange-600",
-            span: "text-orange-400",
-        },
-        Resolved: {
-            article: "bg-gradient-to-b from-green-500 to-green-600",
-            span: "text-green-500",
-        },
-        Flagged: {
-            article: "bg-gradient-to-b from-red-500 to-red-600",
-            span: "text-red-500",
-        },
-    };
-
     const overviewCards = ["Pending", "Resolved", "Flagged"].map(
-        (status, index) => (
-            <article
-                key={index}
-                className={`${
-                    overviewCardsColors[status as TFeedbackStatus].article
-                } w-full px-3 py-4 flex flex-col items-center gap-2 shadow rounded transition duration-200 hover:shadow-xl`}
-            >
-                <h1 className='font-semibold tracking-wider text-xl'>
-                    {status}
-                </h1>
-                <span
-                    className={`text-white text-xl flex justify-center items-center font-bold `}
+        (status, index) => {
+            const statusBackgroundColor = getStatusBackgroundColor(
+                status as TFeedbackStatus
+            );
+
+            return (
+                <article
+                    key={index}
+                    className={`${statusBackgroundColor} w-full px-3 py-4 flex flex-col items-center gap-2 shadow rounded transition duration-200 hover:shadow-xl`}
                 >
-                    {feedbackCounts[status as TFeedbackStatus]}
-                </span>
-            </article>
-        )
+                    <h1 className='font-semibold tracking-wider text-xl'>
+                        {status}
+                    </h1>
+                    <span
+                        className={`text-white text-xl flex justify-center items-center font-bold `}
+                    >
+                        {feedbackCounts[status as TFeedbackStatus]}
+                    </span>
+                </article>
+            );
+        }
     );
 
     return (

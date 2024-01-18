@@ -1,7 +1,7 @@
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 type TPageFlagProps = {
-    status: "Flagged" | "Pending" | "Resolved";
+    status: TFeedbackStatus;
 };
 
 export default function PageFlag({ status }: TPageFlagProps) {

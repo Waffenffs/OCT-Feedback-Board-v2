@@ -6,14 +6,13 @@ import { useState, useEffect } from "react";
 import StudentFeedbackCard from "./StudentFeedbackCard";
 import FilterMenu from "../ui/FilterMenu";
 
-export type TFeedbackStatus = "Pending" | "Resolved" | "Flagged" | "All";
-export type TSort = "Newest to Oldest" | "Oldest to Newest" | "Alphabetical";
+import { getUserInfo } from "@/app/utils/supabaseUtils";
 
 export default function StudentFeedbackList() {
     const [feedbacks, setFeedbacks] = useState<any | null>(null);
     const [isActiveFilterMenu, setIsActiveFilterMenu] = useState(false);
     const [activeCategory, setActiveCategory] =
-        useState<TFeedbackStatus>("All");
+        useState<TFeedbackStatusWithAll>("All");
     const [activeSort, setActiveSort] = useState<TSort>("Newest to Oldest");
     const [isLoading, setIsLoading] = useState(true);
 
@@ -21,18 +20,10 @@ export default function StudentFeedbackList() {
 
     const fetchData = async () => {
         try {
-            const {
-                data: { session },
-                error: session_error,
-            } = await supabase.auth.getSession();
+            const { user } = await getUserInfo(supabase);
 
-            if (session_error)
-                throw `Origin app/components/students/StudentFeedbackList.tsx >>: ${session_error}`;
-
-            const user = session?.user;
             const userUID = user?.id;
 
-            // Fetch user's feedbacks
             const { data: feedbacksData, error: feedbacksError } =
                 await supabase
                     .from("feedbacks")
@@ -67,7 +58,7 @@ export default function StudentFeedbackList() {
 
     const filterByStatus = (
         feedbacks: any[],
-        status: TFeedbackStatus
+        status: TFeedbackStatusWithAll
     ): any[] => {
         if (status === "All") {
             return feedbacks;
@@ -132,7 +123,7 @@ export default function StudentFeedbackList() {
         );
 
     const studentFeedbackCards = feedbacks.map(
-        (feedback: any, index: number) => (
+        (feedback: TFeedback, index: number) => (
             <StudentFeedbackCard
                 key={index}
                 feedback_id={feedback.feedback_id}
@@ -141,6 +132,7 @@ export default function StudentFeedbackList() {
                 feedback_status={feedback.feedback_status}
                 feedback_created_at={feedback.feedback_created_at}
                 feedback_reference={feedback.feedback_reference}
+                feedback_creator_uid={feedback.feedback_creator_uid}
             />
         )
     );

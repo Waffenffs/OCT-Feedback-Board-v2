@@ -1,53 +1,36 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSearchParams } from "next/navigation";
 
 import { PiStudentLight } from "react-icons/pi";
 
 import PageFlag from "@/app/components/ui/PageFlag";
 
-type TFeedback = {
-    feedback_id: number;
-    feedback_reference: number;
-    feedback_creator_uid: string;
-    feedback_title: string;
-    feedback_description: string;
-    feedback_status: "Pending" | "Resolved" | "Flagged";
-    feedback_created_at: string;
-};
-
-type TCreator = {
-    account_id: number;
-    account_name: string;
-    account_type: "Student";
-    account_uid: string;
-};
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+    getFeedbackData,
+    getAccountInfoWithUID,
+    getAccountInfoWithID,
+} from "@/app/utils/supabaseUtils";
 
 type TCombinedData = {
     feedback: TFeedback;
-    creator: TCreator;
-    referredDepartment: string;
+    creator: TUser | null;
+    referredDepartment: string | undefined;
 };
 
 export default function Feedback() {
     const [pageData, setPageData] = useState<TCombinedData | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const supabase = createClientComponentClient();
     const searchParams = useSearchParams();
     const feedbackId = searchParams.get("id");
 
+    const supabase = createClientComponentClient();
+
     useEffect(() => {
         const fetchData = async () => {
-            const { data: feedback_data, error } = await supabase
-                .from("feedbacks")
-                .select("*")
-                .eq("feedback_id", feedbackId);
-
-            if (error) throw error;
-
             const months = [
                 "January",
                 "February",
@@ -63,41 +46,41 @@ export default function Feedback() {
                 "December",
             ];
 
+            const feedback = await getFeedbackData(supabase, feedbackId!);
+
+            if (!feedback) console.error("Feedback data not found!");
+
             const feedbackTimestamp = new Date(
-                feedback_data[0].feedback_created_at
+                feedback?.feedback_created_at as string
             );
             const formattedDate = `Created at ${
                 months[feedbackTimestamp.getMonth()]
             } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
 
             const feedbackData: TFeedback = {
-                ...feedback_data[0],
+                ...feedback!,
                 feedback_created_at: formattedDate,
             };
 
-            const { data: creator_data, error: error_one } = await supabase
-                .from("accounts")
-                .select("*")
-                .eq("account_uid", feedbackData.feedback_creator_uid);
+            const creator = await getAccountInfoWithUID(
+                supabase,
+                feedback?.feedback_creator_uid!
+            );
 
-            if (error_one) throw error_one;
+            if (!creator) console.error("Creator not found!");
 
-            const creatorData = creator_data[0];
+            const referredDepartment = await getAccountInfoWithID(
+                supabase,
+                feedbackData?.feedback_reference
+            );
 
-            const { data: referred_department, error: error_two } =
-                await supabase
-                    .from("accounts")
-                    .select("account_name")
-                    .eq("account_id", feedbackData.feedback_reference);
-
-            if (error_two) throw error_two;
-
-            const referredDepartment = referred_department[0].account_name;
+            if (!referredDepartment)
+                console.error("Referred department not found!");
 
             setPageData({
                 feedback: feedbackData,
-                creator: creatorData,
-                referredDepartment: referredDepartment,
+                creator: creator,
+                referredDepartment: referredDepartment?.account_name,
             });
             setLoading(false);
         };
@@ -132,7 +115,7 @@ export default function Feedback() {
                 <section className='flex flex-row gap-1 items-end '>
                     <PiStudentLight className='text-2xl' />
                     <span className='font-semibold '>
-                        {pageData?.creator.account_name}
+                        {pageData?.creator && pageData?.creator.account_name}
                     </span>
                 </section>
 

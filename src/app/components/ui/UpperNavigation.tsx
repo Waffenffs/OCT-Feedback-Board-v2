@@ -8,6 +8,8 @@ import { LuBell } from "react-icons/lu";
 
 import Link from "next/link";
 
+import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+
 export default function UpperNavigation() {
     const [accountName, setAccountName] = useState<string | null>(null);
     const [accountType, setAccountType] = useState<string | null>(null);
@@ -17,32 +19,17 @@ export default function UpperNavigation() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const {
-                    data: { session },
-                    error: session_error,
-                } = await supabase.auth.getSession();
+                const { user } = await getUserInfo(supabase);
 
-                if (session_error)
-                    throw `Origin app/components/ui/UpperNavigation.tsx >>: ${session_error}`;
+                const accountInfo = await getAccountInfoWithUID(
+                    supabase,
+                    user?.id!
+                );
+                const accountName = accountInfo?.account_name;
+                const accountType = accountInfo?.account_type;
 
-                const user = session?.user;
-
-                const { data: accountData } = await supabase
-                    .from("accounts")
-                    .select("account_type, account_name")
-                    .eq("account_uid", user?.id);
-
-                let accountCredentials;
-
-                if (accountData && accountData.length > 0) {
-                    accountCredentials = {
-                        userAccountType: accountData[0].account_type,
-                        userAccountName: accountData[0].account_name,
-                    };
-                }
-
-                setAccountName(accountCredentials?.userAccountName);
-                setAccountType(accountCredentials?.userAccountType);
+                setAccountName(accountName!);
+                setAccountType(accountType!);
             } catch (error) {
                 console.error(
                     `Error fetching data for upper navigation: ${error}`
@@ -86,14 +73,7 @@ export default function UpperNavigation() {
                     </h2>
 
                     <div className='self-end flex flex-row gap-1 items-center text-zinc-100 px-3 py-1 rounded bg-zinc-400'>
-                        {
-                            userIcons[
-                                accountType as
-                                    | "Student"
-                                    | "Department"
-                                    | "Administrator"
-                            ]
-                        }
+                        {userIcons[accountType as TAccountType]}
                         <h3>{accountType}</h3>
                     </div>
                 </div>
