@@ -14,12 +14,13 @@ export default function PageFlag({ status }: TPageFlagProps) {
         Flagged: {
             comment:
                 "This feedback has been flagged as inappropriate and taken down.",
-            stylings: "border-orange-500 bg-orange-100",
+            stylings: "border-red-500 bg-red-100 text-red-600",
             icon: <FaRegQuestionCircle />,
         },
         Resolved: {
-            comment: "This feedback has been resolved and archived.",
-            stylings: "border-orange-500 bg-orange-100",
+            comment:
+                "This feedback has been resolved and replies are disabled.",
+            stylings: "border-green-500 bg-green-100 text-green-600 ",
             icon: <FaRegQuestionCircle />,
         },
     };

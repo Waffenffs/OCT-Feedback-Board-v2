@@ -4,7 +4,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 
 import { PiStudentFill } from "react-icons/pi";
-import { LuBell } from "react-icons/lu";
 
 import Link from "next/link";
 
@@ -63,9 +62,7 @@ export default function UpperNavigation() {
                 <Link
                     href={`/${accountType.toLowerCase()}/notifications`}
                     className='text-2xl text-zinc-500'
-                >
-                    <LuBell />
-                </Link>
+                ></Link>
 
                 <div className='flex flex-col gap-3 py-2 pr-3'>
                     <h2 className='font-semibold text-zinc-500'>

@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export async function getUserInfo(supabase: SupabaseClient) {
     try {
@@ -87,6 +87,21 @@ export async function getAccountInfoWithID(
         } else {
             return null;
         }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateFeedbackStatus(
+    supabase: SupabaseClient,
+    feedbackID: number,
+    feedbackStatus: TFeedbackStatus
+) {
+    try {
+        await supabase
+            .from("feedbacks")
+            .update({ feedback_status: feedbackStatus })
+            .eq("feedback_id", feedbackID);
     } catch (error) {
         throw error;
     }

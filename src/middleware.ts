@@ -30,7 +30,6 @@ export async function middleware(req: NextRequest) {
         name: `sb-${supabaseURL}-auth-token`,
         value: JSON.stringify(session),
         path: "/",
-        // expires: new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 365),
     };
 
     res.cookies.set(sessionCookies);

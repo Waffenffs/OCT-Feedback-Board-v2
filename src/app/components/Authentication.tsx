@@ -15,7 +15,7 @@ type TAuthenticationProps = {
 };
 
 export default function Authentication({ mode }: TAuthenticationProps) {
-    // Sample department acocunt:
+    // Sample accounts (Accounts will be resetted in final launch):
     // octmarketingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
     // password: latenightattentions
 

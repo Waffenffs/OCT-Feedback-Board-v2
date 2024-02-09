@@ -42,7 +42,7 @@ export default function StudentFeedbackCard(props: TFeedback) {
     const formattedDate = getFormattedDate(props.feedback_created_at);
 
     return (
-        <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow hover:shadow-md transition duration-300 ease-in-out'>
+        <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow rounded-md'>
             <div className='h-4 w-6 pt-1 relative'>
                 <div
                     className={`group cursor-default rounded shadow ${statusBackgroundColor}`}
@@ -61,6 +61,7 @@ export default function StudentFeedbackCard(props: TFeedback) {
                 <div>
                     <Link
                         href={`/feedback/param?id=${props.feedback_id}`}
+                        target='_blank'
                         className='font-bold text-lg cursor-pointer text-black'
                     >
                         {props.feedback_title}

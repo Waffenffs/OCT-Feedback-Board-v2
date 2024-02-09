@@ -11,7 +11,7 @@ declare global {
         feedback_created_at: string;
         feedback_creator_uid: string;
         feedback_description: string;
-        feedback_id: string;
+        feedback_id: number;
         feedback_reference: number;
         feedback_status: TFeedbackStatus;
         feedback_title: string;
