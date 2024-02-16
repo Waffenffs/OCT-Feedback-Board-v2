@@ -4,8 +4,11 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { PiStudentLight } from "react-icons/pi";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
 import PageFlag from "@/app/components/ui/PageFlag";
+import CommentInput from "@/app/components/feedback/CommentInput";
+import Link from "next/link";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
@@ -53,9 +56,8 @@ export default function Feedback() {
             const feedbackTimestamp = new Date(
                 feedback?.feedback_created_at as string
             );
-            const formattedDate = `Created at ${
-                months[feedbackTimestamp.getMonth()]
-            } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
+            const formattedDate = `Created at ${months[feedbackTimestamp.getMonth()]
+                } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
 
             const feedbackData: TFeedback = {
                 ...feedback!,
@@ -110,8 +112,13 @@ export default function Feedback() {
         );
 
     return (
-        <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl'>
-            <header className='w-full flex justify-between items-center text-slate-600 text-sm'>
+        <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl overflow-auto'>
+            <Link href={"/"} className="flex flex-row items-center gap-2 text-sm font-bold text-blue-500">
+                <FaLongArrowAltLeft />
+                <span>Home</span>
+            </Link>
+
+            <header className='w-full flex justify-between items-center text-slate-600 text-sm mt-5'>
                 <section className='flex flex-row gap-1 items-end '>
                     <PiStudentLight className='text-2xl' />
                     <span className='font-semibold '>
@@ -142,12 +149,16 @@ export default function Feedback() {
                 <PageFlag
                     status={
                         pageData?.feedback.feedback_status as
-                            | "Pending"
-                            | "Resolved"
-                            | "Flagged"
+                        | "Pending"
+                        | "Resolved"
+                        | "Flagged"
                     }
                 />
             )}
+
+            <section className="mt-32">
+                <CommentInput status={pageData?.feedback.feedback_status!} />
+            </section>
         </div>
     );
 }

@@ -3,8 +3,6 @@ import { headers } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-import DashboardLayout from "@/app/components/ui/DashboardLayout";
-
 export async function generateMetadata() {
     const url = new URL(headers().get("x-url")!);
     const feedbackId = url.searchParams.get("id")?.split("/")[0];
@@ -28,5 +26,7 @@ export async function generateMetadata() {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    return <DashboardLayout>{children}</DashboardLayout>;
+    return (
+        <div>{children}</div>
+    )
 }
