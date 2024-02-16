@@ -157,7 +157,7 @@ export default function Feedback() {
             )}
 
             <section className="mt-32">
-                <CommentInput status={pageData?.feedback.feedback_status!} />
+                <CommentInput status={pageData?.feedback.feedback_status!} feedbackId={pageData?.feedback.feedback_id!} />
             </section>
         </div>
     );

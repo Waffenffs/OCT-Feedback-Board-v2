@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
     type TFeedbackStatus = "Pending" | "Resolved" | "Flagged";
@@ -16,6 +16,13 @@ declare global {
         feedback_status: TFeedbackStatus;
         feedback_title: string;
     };
+
+    type TComment = {
+        feedback_id: number;
+        comment_creator_uid: string;
+        comment_content: string;
+        comment_created_at: string;
+    }
 
     type TUser = {
         account_id: number;

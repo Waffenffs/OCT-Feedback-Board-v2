@@ -13,7 +13,7 @@ export default function PageFlag({ status }: TPageFlagProps) {
         },
         Flagged: {
             comment:
-                "This feedback has been flagged as inappropriate and taken down.",
+                "This feedback has been flagged as inappropriate and replies are disabled.",
             stylings: "border-red-500 bg-red-100 text-red-600",
             icon: <FaRegQuestionCircle />,
         },

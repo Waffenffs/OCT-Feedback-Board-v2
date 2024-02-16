@@ -1,14 +1,46 @@
 import { FiMessageSquare } from "react-icons/fi";
+import { useState } from "react";
+
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import { getUserInfo } from "@/app/utils/supabaseUtils";
 
 type TCommentInputProps = {
     status: TFeedbackStatus;
+    feedbackId: number;
 };
 
-export default function CommentInput({ status }: TCommentInputProps) {
-    const isDisabled = status === "Flagged" || status === "Resolved";
+export default function CommentInput({ status, feedbackId }: TCommentInputProps) {
+    const [loading, setLoading] = useState(false);
+    const [commentContent, setCommentContent] = useState('');
+
+    const supabase = createClientComponentClient();
+
+    const isDisabled = status === "Flagged" || status === "Resolved" || loading;
     const buttonStyling = isDisabled
         ? "cursor-not-allowed hover:bg-red-600"
         : "hover:bg-blue-500";
+
+    const sendComment = async () => {
+        setLoading(true);
+
+        const { user } = await getUserInfo(supabase)
+
+        const comment = {
+            feedback_id: feedbackId,
+            comment_content: commentContent,
+            comment_creator_uid: user?.id
+        }
+
+        const { error: submissionError } = await supabase.from('comments').insert(comment)
+
+        if (submissionError) throw submissionError
+
+        setCommentContent('') // Reset input
+        setLoading(false)
+
+        console.log('Successfully submitted comment!')
+    }
 
     return (
         <section className='px-10'>
@@ -21,11 +53,14 @@ export default function CommentInput({ status }: TCommentInputProps) {
                 disabled={isDisabled}
                 placeholder='Insert your thoughts here...'
                 className={`w-full py-1 px-2 mt-1 border-2 rounded resize-none ${isDisabled && `cursor-not-allowed`}`}
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
                 rows={4}
             />
 
             <footer className='w-full flex mt-3 justify-end items-center'>
                 <button
+                    onClick={() => sendComment()}
                     disabled={isDisabled}
                     className={`rounded font-semibold py-1 px-3 tracking-wide bg-zinc-900 text-white ${buttonStyling}`}
                 >
