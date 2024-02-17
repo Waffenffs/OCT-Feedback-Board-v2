@@ -10,9 +10,12 @@ type TCommentInputProps = {
     feedbackId: number;
 };
 
-export default function CommentInput({ status, feedbackId }: TCommentInputProps) {
+export default function CommentInput({
+    status,
+    feedbackId,
+}: TCommentInputProps) {
     const [loading, setLoading] = useState(false);
-    const [commentContent, setCommentContent] = useState('');
+    const [commentContent, setCommentContent] = useState("");
 
     const supabase = createClientComponentClient();
 
@@ -24,23 +27,29 @@ export default function CommentInput({ status, feedbackId }: TCommentInputProps)
     const sendComment = async () => {
         setLoading(true);
 
-        const { user } = await getUserInfo(supabase)
+        const { user } = await getUserInfo(supabase);
 
         const comment = {
             feedback_id: feedbackId,
             comment_content: commentContent,
-            comment_creator_uid: user?.id
-        }
+            comment_creator_uid: user?.id,
+        };
 
-        const { error: submissionError } = await supabase.from('comments').insert(comment)
+        const { error: submissionError } = await supabase
+            .from("comments")
+            .insert(comment);
 
-        if (submissionError) throw submissionError
+        if (submissionError) throw submissionError;
 
-        setCommentContent('') // Reset input
-        setLoading(false)
+        setCommentContent(""); // Reset input
+        setLoading(false);
 
-        console.log('Successfully submitted comment!')
-    }
+        console.log("Successfully submitted comment!");
+    };
+
+    // To - do
+    // 1. Display comments in column layout (sorted from oldest to newest)
+    // 2. Do this weird stuff where whitespaces don't get ignored
 
     return (
         <section className='px-10'>
@@ -52,7 +61,9 @@ export default function CommentInput({ status, feedbackId }: TCommentInputProps)
             <textarea
                 disabled={isDisabled}
                 placeholder='Insert your thoughts here...'
-                className={`w-full py-1 px-2 mt-1 border-2 rounded resize-none ${isDisabled && `cursor-not-allowed`}`}
+                className={`w-full py-1 px-2 mt-1 border-2 rounded resize-none ${
+                    isDisabled && `cursor-not-allowed`
+                }`}
                 value={commentContent}
                 onChange={(e) => setCommentContent(e.target.value)}
                 rows={4}

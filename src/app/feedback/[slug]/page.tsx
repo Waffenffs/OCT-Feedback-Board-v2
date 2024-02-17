@@ -9,6 +9,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import PageFlag from "@/app/components/ui/PageFlag";
 import CommentInput from "@/app/components/feedback/CommentInput";
 import Link from "next/link";
+import CommentCard from "@/app/components/feedback/CommentCard";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
@@ -26,11 +27,27 @@ type TCombinedData = {
 export default function Feedback() {
     const [pageData, setPageData] = useState<TCombinedData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [feedbackComments, setFeedbackComments] = useState<TComment[] | null>(
+        null
+    );
+    const [loadingFeedbackComments, setLoadingFeedbackComments] =
+        useState(true);
 
     const searchParams = useSearchParams();
     const feedbackId = searchParams.get("id");
 
     const supabase = createClientComponentClient();
+
+    const fetchComments = async () => {
+        const { data: comments, error: fetchingError } = await supabase
+            .from("comments")
+            .select("*");
+
+        if (fetchingError) throw fetchingError;
+
+        setLoadingFeedbackComments(false);
+        setFeedbackComments(comments);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,8 +73,9 @@ export default function Feedback() {
             const feedbackTimestamp = new Date(
                 feedback?.feedback_created_at as string
             );
-            const formattedDate = `Created at ${months[feedbackTimestamp.getMonth()]
-                } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
+            const formattedDate = `Created at ${
+                months[feedbackTimestamp.getMonth()]
+            } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
 
             const feedbackData: TFeedback = {
                 ...feedback!,
@@ -88,7 +106,13 @@ export default function Feedback() {
         };
 
         fetchData();
+        fetchComments();
     }, []);
+
+    // Scratch comments being real-time, just add a refresh button
+    // After user sends/uploads a comment, refresh the comments too
+
+    // If loadingFeedbackComments, then render a loading comments
 
     if (loading)
         return (
@@ -113,7 +137,10 @@ export default function Feedback() {
 
     return (
         <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl overflow-auto'>
-            <Link href={"/"} className="flex flex-row items-center gap-2 text-sm font-bold text-blue-500">
+            <Link
+                href={"/"}
+                className='flex flex-row items-center gap-2 text-sm font-bold text-blue-500'
+            >
                 <FaLongArrowAltLeft />
                 <span>Home</span>
             </Link>
@@ -149,15 +176,28 @@ export default function Feedback() {
                 <PageFlag
                     status={
                         pageData?.feedback.feedback_status as
-                        | "Pending"
-                        | "Resolved"
-                        | "Flagged"
+                            | "Pending"
+                            | "Resolved"
+                            | "Flagged"
                     }
                 />
             )}
 
-            <section className="mt-32">
-                <CommentInput status={pageData?.feedback.feedback_status!} feedbackId={pageData?.feedback.feedback_id!} />
+            <section className='mt-32'>
+                <CommentInput
+                    status={pageData?.feedback.feedback_status!}
+                    feedbackId={pageData?.feedback.feedback_id!}
+                />
+            </section>
+
+            <section className='mt-16'>
+                <h1 className='font-semibold text-2xl'>Comments</h1>
+                <hr className='h-px mt-4 bg-gray-300 border-0' />
+                {feedbackComments &&
+                    feedbackComments.length >= 1 &&
+                    feedbackComments.map((comment) => (
+                        <CommentCard {...comment} />
+                    ))}
             </section>
         </div>
     );
