@@ -3,14 +3,11 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+import { getFormattedDate } from "@/app/utils/helperUtils";
 
 import { useEffect, useState } from "react";
 
 export default function CommentCard(props: TComment) {
-    // Tasks:
-    // 1. Do some stylish-stylish stuff
-    // 2. Maybe memoize feedbackComments state for performance!!!
-
     const [commentorAccountInfo, setCommentorAccountInfo] =
         useState<TUser | null>(null);
 
@@ -23,16 +20,29 @@ export default function CommentCard(props: TComment) {
                 props.comment_creator_uid
             );
 
-            console.log(info || "Comments can't be found.");
+            // Check if account info exists
+            if (!info) {
+                console.error("Account does not exist");
+                return;
+            }
+
+            setCommentorAccountInfo(info);
+
+            console.log(`Account info: ${info}`);
         };
 
         fetchCommentorAccountInfo();
     }, []);
 
     return (
-        <article className='rounded-md shadow border flex flex-col justify-start'>
-            <span>{}</span>
-            <h1>HELLO MADLANG PEOPLE!</h1>
+        <article className='rounded-md shadow border flex flex-col gap-4 p-2 justify-start'>
+            <span className='font-semibold'>
+                {commentorAccountInfo?.account_name}
+            </span>
+            <p className='whitespace-pre'>{props.comment_content}</p>
+            <footer className='font-semibold text-zinc-500 text-sm'>
+                {getFormattedDate(props.comment_created_at)}
+            </footer>
         </article>
     );
 }

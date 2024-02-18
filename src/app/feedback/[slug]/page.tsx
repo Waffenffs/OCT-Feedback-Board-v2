@@ -134,6 +134,19 @@ export default function Feedback() {
                 <div className='mt-32 h-14 w-full p-5 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
             </div>
         );
+    //     {feedbackComments &&
+    // feedbackComments.length >= 1 &&
+    // feedbackComments.map((comment) => (
+    //     <CommentCard {...comment} />
+    // ))}
+
+    const feedbackCommentsExist =
+        feedbackComments && feedbackComments.length >= 1;
+    const commentCards =
+        feedbackCommentsExist &&
+        feedbackComments.map((comment, index) => (
+            <CommentCard key={index} {...comment} />
+        ));
 
     return (
         <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl overflow-auto'>
@@ -193,11 +206,10 @@ export default function Feedback() {
             <section className='mt-16'>
                 <h1 className='font-semibold text-2xl'>Comments</h1>
                 <hr className='h-px mt-4 bg-gray-300 border-0' />
-                {feedbackComments &&
-                    feedbackComments.length >= 1 &&
-                    feedbackComments.map((comment) => (
-                        <CommentCard {...comment} />
-                    ))}
+
+                <section className='flex flex-col gap-5 mt-7'>
+                    {commentCards}
+                </section>
             </section>
         </div>
     );
