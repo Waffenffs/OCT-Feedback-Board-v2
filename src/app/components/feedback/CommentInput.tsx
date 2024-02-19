@@ -43,13 +43,7 @@ export default function CommentInput({
 
         setCommentContent(""); // Reset input
         setLoading(false);
-
-        console.log("Successfully submitted comment!");
     };
-
-    // To - do
-    // 1. Display comments in column layout (sorted from oldest to newest)
-    // 2. Do this weird stuff where whitespaces don't get ignored
 
     return (
         <section className='px-10'>

@@ -1,4 +1,7 @@
-export function getFormattedDate(feedback_created_at: string) {
+export function getFormattedDate(
+    feedback_created_at: string,
+    with_created?: boolean
+) {
     const months = [
         "January",
         "February",
@@ -15,10 +18,13 @@ export function getFormattedDate(feedback_created_at: string) {
     ];
 
     const feedbackTimestamp = new Date(feedback_created_at);
-    const formattedDate = `Created at ${
-        months[feedbackTimestamp.getMonth()]
-    } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
+    const formattedDate = `${months[feedbackTimestamp.getMonth()]} ${
+        feedbackTimestamp.getDay() === 0 ? 1 : feedbackTimestamp.getDay()
+    }, ${feedbackTimestamp.getFullYear()}`;
 
+    if (with_created) {
+        return `Created at ${formattedDate}`;
+    }
     return formattedDate;
 }
 

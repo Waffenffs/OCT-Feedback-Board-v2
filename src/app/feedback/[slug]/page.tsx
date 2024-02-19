@@ -111,12 +111,11 @@ export default function Feedback() {
 
     // Scratch comments being real-time, just add a refresh button
     // After user sends/uploads a comment, refresh the comments too
-
     // If loadingFeedbackComments, then render a loading comments
 
     if (loading)
         return (
-            <div className='w-full h-full py-14 px-10 bg-white mt-10 rounded-t-[4rem] animate-pulse'>
+            <div className='w-full h-screen py-14 px-10 bg-white mt-10 rounded-t-[4rem] animate-pulse'>
                 <div className='w-full flex justify-between items-center'>
                     <div className='h-5 w-32 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
                     <div className='h-5 w-28 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
@@ -134,11 +133,6 @@ export default function Feedback() {
                 <div className='mt-32 h-14 w-full p-5 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
             </div>
         );
-    //     {feedbackComments &&
-    // feedbackComments.length >= 1 &&
-    // feedbackComments.map((comment) => (
-    //     <CommentCard {...comment} />
-    // ))}
 
     const feedbackCommentsExist =
         feedbackComments && feedbackComments.length >= 1;
@@ -149,7 +143,7 @@ export default function Feedback() {
         ));
 
     return (
-        <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl overflow-auto'>
+        <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl'>
             <Link
                 href={"/"}
                 className='flex flex-row items-center gap-2 text-sm font-bold text-blue-500'
@@ -180,7 +174,7 @@ export default function Feedback() {
                     </span>
                 </div>
 
-                <p className='mt-5'>
+                <p className='mt-5 whitespace-pre-wrap'>
                     {pageData?.feedback.feedback_description}
                 </p>
             </section>
