@@ -30,10 +30,6 @@ export default function CommentInput({
 
         const { user } = await getUserInfo(supabase);
 
-        // TO-DO:
-        // 1. Reset comments table and start fresh
-        // 2. With `comment_uid` prop we can edit target comments
-
         const comment = {
             feedback_id: feedbackId,
             comment_content: commentContent,

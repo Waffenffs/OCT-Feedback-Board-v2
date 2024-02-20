@@ -1,8 +1,8 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
 import { getFormattedDate } from "@/app/utils/helperUtils";
+import { getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { useEffect, useState } from "react";
 
