@@ -41,7 +41,8 @@ export default function Feedback() {
     const fetchComments = async () => {
         const { data: comments, error: fetchingError } = await supabase
             .from("comments")
-            .select("*");
+            .select("*")
+            .eq("feedback_id", feedbackId);
 
         if (fetchingError) throw fetchingError;
 
