@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { PiStudentLight } from "react-icons/pi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { PiStudentLight } from "react-icons/pi";
 
-import PageFlag from "@/app/components/ui/PageFlag";
-import CommentInput from "@/app/components/feedback/CommentInput";
-import Link from "next/link";
 import CommentCard from "@/app/components/feedback/CommentCard";
+import CommentInput from "@/app/components/feedback/CommentInput";
+import PageFlag from "@/app/components/ui/PageFlag";
+import Link from "next/link";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
-    getFeedbackData,
-    getAccountInfoWithUID,
     getAccountInfoWithID,
+    getAccountInfoWithUID,
+    getFeedbackData,
 } from "@/app/utils/supabaseUtils";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type TCombinedData = {
     feedback: TFeedback;
@@ -143,7 +143,7 @@ export default function Feedback() {
         ));
 
     return (
-        <div className='w-full h-full py-14 px-10 bg-white mt-10 text-slate-900 rounded-t-[4rem] shadow-2xl'>
+        <div className='w-full h-full py-14 px-10 bg-white mt-5 text-slate-900 rounded-t-[4rem] shadow-2xl'>
             <Link
                 href={"/"}
                 className='flex flex-row items-center gap-2 text-sm font-bold text-blue-500'
