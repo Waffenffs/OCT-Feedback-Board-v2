@@ -11,8 +11,11 @@ export default function CommentActions({ props, close }: TCommentActionsProps) {
     // 1. Add edit function
     // 2. Add remove function
 
+    // # Edit Function
+    // With `comment_uid` prop, edit the target comment
+
     return (
-        <div className='bg-zinc-600/50 overflow-hidden fixed top-0 right-0 left-0 flex justify-center items-center w-full h-full text-neutral-400'>
+        <div className='bg-zinc-600/50 fixed top-0 right-0 left-0 flex justify-center items-center w-screen h-screen text-neutral-400'>
             <article className='rounded-xl px-6 py-5 shadow bg-[#1c1c1c] border-2 border-[#3f3f46] w-[26rem]'>
                 <header className='flex flex-row w-full justify-between items-center'>
                     <h1 className='font-semibold text-md tracking-wide'>
