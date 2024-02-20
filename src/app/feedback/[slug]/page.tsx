@@ -145,13 +145,15 @@ export default function Feedback() {
 
     return (
         <div className='w-full h-full py-14 px-10 bg-white mt-5 text-slate-900 rounded-t-[4rem] shadow-2xl'>
-            <Link
-                href={"/"}
-                className='flex flex-row items-center gap-2 text-sm font-bold text-blue-500'
-            >
-                <FaLongArrowAltLeft />
-                <span>Home</span>
-            </Link>
+            <div className='flex justify-start'>
+                <Link
+                    href={"/"}
+                    className='flex flex-row items-center gap-2 text-sm font-bold text-blue-500'
+                >
+                    <FaLongArrowAltLeft />
+                    <span>Home</span>
+                </Link>
+            </div>
 
             <header className='w-full flex justify-between items-center text-slate-600 text-sm mt-5'>
                 <section className='flex flex-row gap-1 items-end '>
