@@ -27,7 +27,7 @@ export default function PageFlag({ status }: TPageFlagProps) {
 
     return (
         <article
-            className={`flex flex-row items-center gap-3 w-full mt-32 p-5 border rounded font-semibold text-sm tracking-wider ${flagProperties[status].stylings}`}
+            className={`flex flex-row items-center gap-3 mt-32 p-5 border rounded font-semibold text-sm tracking-wider ${flagProperties[status].stylings}`}
         >
             {flagProperties[status].icon}
             <span>{flagProperties[status].comment}</span>
