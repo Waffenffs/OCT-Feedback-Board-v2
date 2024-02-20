@@ -15,9 +15,15 @@ type TAuthenticationProps = {
 };
 
 export default function Authentication({ mode }: TAuthenticationProps) {
-    // Sample accounts (Accounts will be resetted in final launch):
+    // Sample accounts (Accounts will be reset in final launch):
+
+    // # Department
     // octmarketingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
     // password: latenightattentions
+
+    // # Student
+    // hulksmash1337@gmail.com
+    // hulkdestroyeverything
 
     const [authenticationEmail, setAuthenticationEmail] = useState("");
     const [authenticationPassword, setAuthenticationPassword] = useState("");
