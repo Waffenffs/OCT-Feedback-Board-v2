@@ -1,5 +1,6 @@
 import { FiMessageSquare } from "react-icons/fi";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -29,10 +30,15 @@ export default function CommentInput({
 
         const { user } = await getUserInfo(supabase);
 
+        // TO-DO:
+        // 1. Reset comments table and start fresh
+        // 2. With `comment_uid` prop we can edit target comments
+
         const comment = {
             feedback_id: feedbackId,
             comment_content: commentContent,
             comment_creator_uid: user?.id,
+            comment_uid: uuidv4(), // Generates a unique RFC4122 UID
         };
 
         const { error: submissionError } = await supabase
