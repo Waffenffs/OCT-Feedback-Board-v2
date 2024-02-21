@@ -63,7 +63,7 @@ export default function SideNavigation() {
         if (error)
             throw `Origin app/components/ui/SideNavigation.tsx >>: ${error}`;
 
-        router.replace("/login");
+        router.refresh();
     };
 
     const links = {
