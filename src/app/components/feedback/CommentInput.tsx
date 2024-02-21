@@ -9,11 +9,13 @@ import { getUserInfo } from "@/app/utils/supabaseUtils";
 type TCommentInputProps = {
     status: TFeedbackStatus;
     feedbackId: number;
+    refComments(): void;
 };
 
 export default function CommentInput({
     status,
     feedbackId,
+    refComments,
 }: TCommentInputProps) {
     const [loading, setLoading] = useState(false);
     const [commentContent, setCommentContent] = useState("");
@@ -22,7 +24,7 @@ export default function CommentInput({
 
     const isDisabled = status === "Flagged" || status === "Resolved" || loading;
     const buttonStyling = isDisabled
-        ? "cursor-not-allowed hover:bg-red-600"
+        ? "cursor-not-allowed hover:bg-red-600 hover:shadow-red-500 hover:text-zinc-100"
         : "hover:bg-blue-500";
 
     const sendComment = async () => {
@@ -45,6 +47,7 @@ export default function CommentInput({
 
         setCommentContent(""); // Reset input
         setLoading(false);
+        refComments(); // Refresh comments
     };
 
     return (
@@ -69,7 +72,7 @@ export default function CommentInput({
                 <button
                     onClick={() => sendComment()}
                     disabled={isDisabled}
-                    className={`rounded font-semibold py-1 px-3 tracking-wide bg-zinc-900 text-white ${buttonStyling}`}
+                    className={`rounded font-semibold py-1 px-3 tracking-wide bg-zinc-900 text-white transition shadow ${buttonStyling}`}
                 >
                     Send
                 </button>
