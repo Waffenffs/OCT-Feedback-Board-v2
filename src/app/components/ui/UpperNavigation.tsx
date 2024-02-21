@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 
 import { PiStudentFill } from "react-icons/pi";
 
-import Link from "next/link";
-
 import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
 
 export default function UpperNavigation() {
@@ -57,13 +55,8 @@ export default function UpperNavigation() {
         );
 
     return (
-        <nav className='sticky top-0 z-50 w-full h-16 bg-white flex-1 flex justify-end items-center tracking-wide text-xs border border-b'>
+        <nav className='sticky top-0 z-50 w-full h-16 bg-zinc-100 flex-1 flex justify-end items-center tracking-wide text-xs'>
             <section className='flex flex-row items-center gap-6'>
-                <Link
-                    href={`/${accountType.toLowerCase()}/notifications`}
-                    className='text-2xl text-zinc-500'
-                ></Link>
-
                 <div className='flex flex-col gap-3 py-2 pr-3'>
                     <h2 className='font-semibold text-zinc-500'>
                         {accountName}
