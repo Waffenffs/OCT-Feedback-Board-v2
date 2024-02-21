@@ -6,28 +6,41 @@ import { useState, useEffect } from "react";
 import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
 
 import { IoClose } from "react-icons/io5";
-import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import {
+    MdDeleteOutline,
+    MdOutlineEdit,
+    MdOutlineReport,
+} from "react-icons/md";
 
 type TCommentActionsProps = {
     props: TComment;
     close: React.Dispatch<React.SetStateAction<boolean>>;
+    status: TFeedbackStatus;
 };
 
-export default function CommentActions({ props, close }: TCommentActionsProps) {
+type TUserPrivileges = {
+    hasEditPrivileges: boolean;
+    hasRemovePrivileges: boolean;
+};
+
+export default function CommentActions({
+    props,
+    close,
+    status,
+}: TCommentActionsProps) {
     const [isEditingComment, setIsEditingComment] = useState(false);
-    const [userHasCredentials, setUserHasCredentials] = useState<
-        boolean | null
-    >(false);
+    const [removeCommentPressCount, setRemoveCommentPressCount] = useState(0);
+    const [userPrivileges, setUserPrivileges] = useState<TUserPrivileges>({
+        hasEditPrivileges: false,
+        hasRemovePrivileges: false,
+    });
     const [defaultEditCommentValue, setDefaultEditCommentValue] = useState(
         props.comment_content
     );
-
-    // TO-DO:
-    // 2. Add remove function
     const supabase = createClientComponentClient();
 
     useEffect(() => {
-        const fetchUserCredentials = async () => {
+        const fetchUserPrivileges = async () => {
             const { user } = await getUserInfo(supabase);
 
             if (!user) {
@@ -36,16 +49,24 @@ export default function CommentActions({ props, close }: TCommentActionsProps) {
             }
 
             const accountInfo = await getAccountInfoWithUID(supabase, user?.id);
+            const userIsCommentCreator = user?.id === props.comment_creator_uid;
+            const userIsAdministrator =
+                accountInfo?.account_type === "Administrator";
 
-            if (
-                user?.id === props.comment_creator_uid ||
-                accountInfo?.account_type === "Administrator"
-            ) {
-                setUserHasCredentials(true);
+            if (userIsCommentCreator) {
+                setUserPrivileges({
+                    hasEditPrivileges: true,
+                    hasRemovePrivileges: true,
+                });
+            } else if (userIsAdministrator) {
+                setUserPrivileges({
+                    hasEditPrivileges: false,
+                    hasRemovePrivileges: false,
+                });
             }
         };
 
-        fetchUserCredentials();
+        fetchUserPrivileges();
     }, []);
 
     const editComment = async () => {
@@ -59,7 +80,35 @@ export default function CommentActions({ props, close }: TCommentActionsProps) {
         close(false);
     };
 
-    const showOptions = !userHasCredentials || !isEditingComment;
+    const removeComment = async () => {
+        const { error: err } = await supabase
+            .from("comments")
+            .delete()
+            .eq("comment_uid", props.comment_uid);
+
+        if (err) throw err;
+
+        close(false);
+    };
+
+    const handleRemoveCommentClick = () => {
+        if (removeCommentPressCount === 1) {
+            // User has confirmed to delete the comment
+            removeComment();
+
+            return;
+        }
+
+        setRemoveCommentPressCount(1);
+
+        const unsubscribe = setTimeout(() => {
+            setRemoveCommentPressCount(0);
+        }, 3000);
+
+        () => clearTimeout(unsubscribe);
+    };
+
+    const showOptions = !isEditingComment;
 
     return (
         <div className='bg-zinc-600/50 fixed top-0 right-0 left-0 flex justify-center items-center w-screen h-screen text-neutral-400'>
@@ -76,9 +125,13 @@ export default function CommentActions({ props, close }: TCommentActionsProps) {
 
                 <div className='w-full flex flex-col gap-2 mt-2'>
                     {showOptions ? (
-                        userHasCredentials && (
-                            <>
+                        <>
+                            {userPrivileges.hasEditPrivileges && (
                                 <button
+                                    disabled={
+                                        status === "Resolved" ||
+                                        status === "Flagged"
+                                    }
                                     onClick={() => {
                                         setIsEditingComment(
                                             (prevState) => !prevState
@@ -86,16 +139,34 @@ export default function CommentActions({ props, close }: TCommentActionsProps) {
                                     }}
                                     className='bg-zinc-800 text-slate-400 transition delay-100 hover:bg-zinc-700 hover:text-slate-300 text-sm border border-green-700 flex justify-between items-center rounded-md px-4 py-2'
                                 >
-                                    <span>Edit Comment</span>
+                                    <span>Edit</span>
                                     <MdOutlineEdit className='text-xl' />
                                 </button>
+                            )}
 
-                                <button className='bg-zinc-800 text-slate-400 transition delay-100 hover:bg-zinc-700 hover:text-slate-300 text-sm border border-green-700 flex justify-between items-center rounded-md px-4 py-2'>
-                                    <span>Remove Comment</span>
+                            {userPrivileges.hasRemovePrivileges && (
+                                <button
+                                    onClick={() => handleRemoveCommentClick()}
+                                    className={`transition text-sm border flex justify-between items-center rounded-md px-4 py-2 ${
+                                        removeCommentPressCount === 1
+                                            ? "text-white bg-red-600 hover:bg-red-700 border-red-500"
+                                            : "bg-zinc-800 text-slate-400 hover:bg-zinc-700 hover:text-slate-300 border-green-700"
+                                    }`}
+                                >
+                                    <span className='transition'>
+                                        {removeCommentPressCount === 0
+                                            ? "Remove"
+                                            : "Confirm"}
+                                    </span>
                                     <MdDeleteOutline className='text-xl' />
                                 </button>
-                            </>
-                        )
+                            )}
+
+                            <button className='bg-zinc-800 text-slate-400 transition delay-100 hover:bg-zinc-700 hover:text-slate-300 text-sm border border-green-700 flex justify-between items-center rounded-md px-4 py-2'>
+                                <span>Report</span>
+                                <MdOutlineReport className='text-xl' />
+                            </button>
+                        </>
                     ) : (
                         <form
                             onSubmit={(e) => e.preventDefault()}
