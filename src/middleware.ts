@@ -34,7 +34,9 @@ export async function middleware(req: NextRequest) {
 
     res.cookies.set(sessionCookies);
 
-    if (error_one) throw `Middleware >>: ${error_one}`;
+    if (error_one) {
+        console.error(`Error 1 triggered`);
+    }
 
     if (!session) return NextResponse.redirect(new URL(`/login`, req.url));
 
@@ -43,6 +45,10 @@ export async function middleware(req: NextRequest) {
         account_type: accountType,
         account_uid: accountUID,
     } = await fetchUserCredentials(supabase);
+
+    // Once logged in, user will be redirected to `/`
+    // -- > Their acccount type is analyzed and directed to the appropriate routes
+    // -- > E.g. `/department`, `/student`
 
     if (req.nextUrl.pathname === "/") {
         if (accountType !== "Administrator") {
