@@ -10,6 +10,7 @@ import { MdRefresh } from "react-icons/md";
 import CommentCard from "@/app/components/feedback/CommentCard";
 import CommentInput from "@/app/components/feedback/CommentInput";
 import CommentSkeleton from "@/app/components/feedback/CommentSkeleton";
+import FeedbackSkeleton from "@/app/components/feedback/FeedbackSkeleton";
 import PageFlag from "@/app/components/ui/PageFlag";
 import Link from "next/link";
 
@@ -18,6 +19,7 @@ import {
     getAccountInfoWithUID,
     getFeedbackData,
 } from "@/app/utils/supabaseUtils";
+import { getFormattedDate } from "@/app/utils/helperUtils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type TCombinedData = {
@@ -27,8 +29,6 @@ type TCombinedData = {
 };
 
 export default function Feedback() {
-    // Task: Fetch comments from oldest to newest
-
     const [pageData, setPageData] = useState<TCombinedData | null>(null);
     const [loading, setLoading] = useState(true);
     const [feedbackComments, setFeedbackComments] = useState<TComment[] | null>(
@@ -40,7 +40,6 @@ export default function Feedback() {
 
     const searchParams = useSearchParams();
     const feedbackId = searchParams.get("id");
-
     const supabase = createClientComponentClient();
 
     useEffect(() => {
@@ -50,7 +49,8 @@ export default function Feedback() {
             const { data: comments, error: fetchingError } = await supabase
                 .from("comments")
                 .select("*")
-                .eq("feedback_id", feedbackId);
+                .eq("feedback_id", feedbackId)
+                .order("comment_created_at", { ascending: true });
 
             if (fetchingError) throw fetchingError;
 
@@ -69,32 +69,14 @@ export default function Feedback() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const months = [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-            ];
-
             const feedback = await getFeedbackData(supabase, feedbackId!);
 
             if (!feedback) console.error("Feedback data not found!");
 
-            const feedbackTimestamp = new Date(
-                feedback?.feedback_created_at as string
+            const formattedDate = getFormattedDate(
+                feedback?.feedback_created_at!,
+                { with_created: true }
             );
-            const formattedDate = `Created at ${
-                months[feedbackTimestamp.getMonth()]
-            } ${feedbackTimestamp.getDay()}, ${feedbackTimestamp.getFullYear()}`;
-
             const feedbackData: TFeedback = {
                 ...feedback!,
                 feedback_created_at: formattedDate,
@@ -126,26 +108,7 @@ export default function Feedback() {
         fetchData();
     }, []);
 
-    if (loading)
-        return (
-            <div className='w-full h-screen py-14 px-10 bg-white mt-10 rounded-t-[4rem] animate-pulse'>
-                <div className='w-full flex justify-between items-center'>
-                    <div className='h-5 w-32 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-                    <div className='h-5 w-28 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-                </div>
-
-                <div className='flex flex-col gap-5 mt-7'>
-                    <div className='h-8 w-72 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-                    <div className='flex flex-col gap-1'>
-                        <div className='h-5 w-[30rem] bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-                        <div className='h-5 w-[27rem] bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-                        <div className='h-5 w-[24rem] bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-                    </div>
-                </div>
-
-                <div className='mt-32 h-14 w-full p-5 bg-zinc-200 dark:bg-zinc-400 rounded'></div>
-            </div>
-        );
+    if (loading) return <FeedbackSkeleton />;
 
     const feedbackCommentsExist =
         feedbackComments && feedbackComments.length >= 1;
