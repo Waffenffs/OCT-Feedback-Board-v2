@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { PiStudentLight } from "react-icons/pi";
+import { MdRefresh } from "react-icons/md";
 
 import CommentCard from "@/app/components/feedback/CommentCard";
 import CommentInput from "@/app/components/feedback/CommentInput";
+import CommentSkeleton from "@/app/components/feedback/CommentSkeleton";
 import PageFlag from "@/app/components/ui/PageFlag";
 import Link from "next/link";
 
@@ -25,30 +27,45 @@ type TCombinedData = {
 };
 
 export default function Feedback() {
+    // Task: Fetch comments from oldest to newest
+
     const [pageData, setPageData] = useState<TCombinedData | null>(null);
     const [loading, setLoading] = useState(true);
     const [feedbackComments, setFeedbackComments] = useState<TComment[] | null>(
         null
     );
+    const [refreshComments, setRefreshComments] = useState(false);
     const [loadingFeedbackComments, setLoadingFeedbackComments] =
-        useState(true);
+        useState(false);
 
     const searchParams = useSearchParams();
     const feedbackId = searchParams.get("id");
 
     const supabase = createClientComponentClient();
 
-    const fetchComments = async () => {
-        const { data: comments, error: fetchingError } = await supabase
-            .from("comments")
-            .select("*")
-            .eq("feedback_id", feedbackId);
+    useEffect(() => {
+        const fetchComments = async () => {
+            setLoadingFeedbackComments(true);
 
-        if (fetchingError) throw fetchingError;
+            const { data: comments, error: fetchingError } = await supabase
+                .from("comments")
+                .select("*")
+                .eq("feedback_id", feedbackId);
 
-        setLoadingFeedbackComments(false);
-        setFeedbackComments(comments);
-    };
+            if (fetchingError) throw fetchingError;
+
+            const maxTimeout = 2000;
+            const randomTimeout = Math.random() * maxTimeout;
+
+            setTimeout(() => {
+                setLoadingFeedbackComments(false);
+            }, randomTimeout);
+
+            setFeedbackComments(comments);
+        };
+
+        fetchComments();
+    }, [refreshComments]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,12 +124,7 @@ export default function Feedback() {
         };
 
         fetchData();
-        fetchComments();
     }, []);
-
-    // Scratch comments being real-time, just add a refresh button
-    // After user sends/uploads a comment, refresh the comments too
-    // If loadingFeedbackComments, then render a loading comments
 
     if (loading)
         return (
@@ -140,7 +152,11 @@ export default function Feedback() {
     const commentCards =
         feedbackCommentsExist &&
         feedbackComments.map((comment, index) => (
-            <CommentCard key={index} {...comment} />
+            <CommentCard
+                key={index}
+                props={comment}
+                status={pageData?.feedback.feedback_status!}
+            />
         ));
 
     return (
@@ -194,18 +210,43 @@ export default function Feedback() {
             )}
 
             <section className='mt-32'>
+                <hr className='w-full h-2 my-5'></hr>
                 <CommentInput
                     status={pageData?.feedback.feedback_status!}
                     feedbackId={pageData?.feedback.feedback_id!}
+                    refComments={() =>
+                        setRefreshComments((prevState) => !prevState)
+                    }
                 />
             </section>
 
             <section className='mt-16'>
-                <h1 className='font-semibold text-2xl'>Comments</h1>
+                <div className='flex w-full justify-between items-center'>
+                    <h1 className='font-semibold text-2xl'>Comments</h1>
+                    <button
+                        onClick={() =>
+                            setRefreshComments((prevState) => !prevState)
+                        }
+                        className='flex flex-row gap-1 items-center text-sm font-semibold tracking-wide text-blue-500'
+                    >
+                        <MdRefresh />
+                        <span>Refresh</span>
+                    </button>
+                </div>
                 <hr className='h-px mt-4 bg-gray-300 border-0' />
 
                 <section className='flex flex-col gap-5 mt-7'>
-                    {commentCards}
+                    {loadingFeedbackComments ? (
+                        <>
+                            <CommentSkeleton />
+                            <CommentSkeleton />
+                            <CommentSkeleton />
+                            <CommentSkeleton />
+                            <CommentSkeleton />
+                        </>
+                    ) : (
+                        commentCards
+                    )}
                 </section>
             </section>
         </div>
