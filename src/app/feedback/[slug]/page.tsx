@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { PiStudentLight } from "react-icons/pi";
 import { MdRefresh } from "react-icons/md";
+import { PiStudentLight } from "react-icons/pi";
 
 import CommentCard from "@/app/components/feedback/CommentCard";
 import CommentInput from "@/app/components/feedback/CommentInput";
@@ -14,12 +14,12 @@ import FeedbackSkeleton from "@/app/components/feedback/FeedbackSkeleton";
 import PageFlag from "@/app/components/ui/PageFlag";
 import Link from "next/link";
 
+import { getFormattedDate } from "@/app/utils/helperUtils";
 import {
     getAccountInfoWithID,
     getAccountInfoWithUID,
     getFeedbackData,
 } from "@/app/utils/supabaseUtils";
-import { getFormattedDate } from "@/app/utils/helperUtils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 type TCombinedData = {
@@ -122,6 +122,11 @@ export default function Feedback() {
             />
         ));
 
+    // Making a last reviewed status
+    // Should there a be row that when department/admin flags/reviews a feedback, it will add a last reviewed status
+
+    console.log(`Last reviewed at: ${pageData?.feedback.last_reviewed_at}`);
+
     return (
         <div className='w-full h-full py-14 px-10 bg-white mt-5 text-slate-900 rounded-t-[4rem] shadow-2xl'>
             <div className='flex justify-start'>
@@ -169,6 +174,7 @@ export default function Feedback() {
                             | "Resolved"
                             | "Flagged"
                     }
+                    last_reviewed_at={pageData.feedback.last_reviewed_at}
                 />
             )}
 
