@@ -46,10 +46,7 @@ export async function middleware(req: NextRequest) {
         account_uid: accountUID,
     } = await fetchUserCredentials(supabase);
 
-    // Once logged in, user will be redirected to `/`
-    // -- > Their acccount type is analyzed and directed to the appropriate routes
-    // -- > E.g. `/department`, `/student`
-
+    // Redirect user to `/` path to be rerouted to appropriate type (Department, Student, and Admin)
     if (req.nextUrl.pathname === "/") {
         if (accountType !== "Administrator") {
             return NextResponse.redirect(
