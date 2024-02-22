@@ -8,10 +8,9 @@ import {
     getFormattedDate,
     getStatusBackgroundColor,
 } from "@/app/utils/helperUtils";
-import { updateFeedbackStatus } from "@/app/utils/supabaseUtils";
 
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { CiFlag1 } from "react-icons/ci";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
 type DepartmentFeedbackCardProps = {
     feedback: TFeedback;
@@ -30,8 +29,16 @@ export default function DepartmentFeedbackCard({
 
     const formattedDate = getFormattedDate(feedback.feedback_created_at);
 
-    const updateFeedback = (status: TFeedbackStatus) => {
-        updateFeedbackStatus(supabase, feedback.feedback_id, status);
+    const updateFeedback = async (status: TFeedbackStatus) => {
+        const { error: err } = await supabase
+            .from("feedbacks")
+            .update({
+                feedback_status: status,
+                last_reviewed_at: new Date().toISOString(), // Insert current timestamp
+            })
+            .eq("feedback_id", feedback.feedback_id);
+
+        if (err) throw err;
 
         refreshFeedback();
     };
