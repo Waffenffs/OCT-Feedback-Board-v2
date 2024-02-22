@@ -15,6 +15,7 @@ declare global {
         feedback_reference: number;
         feedback_status: TFeedbackStatus;
         feedback_title: string;
+        last_reviewed_at: string | null;
     };
 
     type TComment = {
