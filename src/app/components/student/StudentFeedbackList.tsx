@@ -1,10 +1,10 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import StudentFeedbackCard from "./StudentFeedbackCard";
 import FilterMenu from "../ui/FilterMenu";
+import StudentFeedbackCard from "./StudentFeedbackCard";
 
 import { getUserInfo } from "@/app/utils/supabaseUtils";
 
@@ -133,6 +133,7 @@ export default function StudentFeedbackList() {
                 feedback_created_at={feedback.feedback_created_at}
                 feedback_reference={feedback.feedback_reference}
                 feedback_creator_uid={feedback.feedback_creator_uid}
+                last_reviewed_at={null}
             />
         )
     );
