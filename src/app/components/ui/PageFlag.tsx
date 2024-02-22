@@ -1,10 +1,12 @@
+import { getFormattedDate } from "@/app/utils/helperUtils";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 type TPageFlagProps = {
     status: TFeedbackStatus;
+    last_reviewed_at: string | null;
 };
 
-export default function PageFlag({ status }: TPageFlagProps) {
+export default function PageFlag({ status, last_reviewed_at }: TPageFlagProps) {
     const flagProperties = {
         Pending: {
             comment: "This feedback is still pending.",
@@ -27,10 +29,16 @@ export default function PageFlag({ status }: TPageFlagProps) {
 
     return (
         <article
-            className={`flex flex-row items-center gap-3 mt-32 p-5 border rounded font-semibold text-sm tracking-wider ${flagProperties[status].stylings}`}
+            className={`flex flex-row justify-between items-center mt-32 p-5 border rounded  text-sm tracking-wider ${flagProperties[status].stylings}`}
         >
-            {flagProperties[status].icon}
-            <span>{flagProperties[status].comment}</span>
+            <div className='flex flex-row items-center gap-3'>
+                {flagProperties[status].icon}
+                <span>{flagProperties[status].comment}</span>
+            </div>
+            <span>
+                Last reviewed at:{" "}
+                {last_reviewed_at ? getFormattedDate(last_reviewed_at) : "N/A"}
+            </span>
         </article>
     );
 }
