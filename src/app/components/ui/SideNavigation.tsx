@@ -1,25 +1,27 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 
 import {
-    IoHomeOutline,
-    IoSettingsOutline,
-    IoLogOutOutline,
     IoCreateOutline,
+    IoHomeOutline,
+    IoLogOutOutline,
+    IoSettingsOutline,
 } from "react-icons/io5";
 import { LuLayoutDashboard } from "react-icons/lu";
 
 import Link from "next/link";
 
-import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+import SideNavigationSkeleton from "./SideNavigationSkeleton";
+
+import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
 
 export default function SideNavigation() {
     const [currentUser, setCurrentUser] = useState<any>(null);
     const [currentPath, setCurrentPath] = useState("");
+    const [sideNavHasLoaded, setSideNavHasLoaded] = useState(false);
     const [userAccountType, setUserAccountType] = useState<TAccountType | null>(
         null
     );
@@ -99,7 +101,8 @@ export default function SideNavigation() {
         Administrator: [],
     };
 
-    if (!currentUser && !userAccountType) return <>Loading...</>;
+    // Is loading
+    if (!currentUser && !userAccountType) return <SideNavigationSkeleton />;
 
     return (
         <nav className='top-0 max-md:w-screen bg-[#1c1c1c] md:h-screen tracking-wide md:flex flex-col justify-between'>
@@ -115,8 +118,24 @@ export default function SideNavigation() {
                 </div>
 
                 <ul className='hidden md:flex flex-col gap-4 w-full justify-center items-center py-5 text-xl font-semibold'>
+                    {sideNavHasLoaded === false && (
+                        <>
+                            <div className='px-4 w-full'>
+                                <div className='animate-pulse w-full h-9 rounded-md bg-zinc-300 dark:bg-zinc-500'></div>
+                            </div>
+                            <div className='px-4 w-full'>
+                                <div className='animate-pulse w-full h-9 rounded-md bg-zinc-300 dark:bg-zinc-500'></div>
+                            </div>
+                            <div className='px-4 w-full'>
+                                <div className='animate-pulse w-full h-9 rounded-md bg-zinc-300 dark:bg-zinc-500'></div>
+                            </div>
+                        </>
+                    )}
                     {userAccountType &&
                         links[userAccountType].map((link, index) => {
+                            if (sideNavHasLoaded == false)
+                                setSideNavHasLoaded(true);
+
                             const isCurrentActivePath =
                                 currentPath === link.href;
 
