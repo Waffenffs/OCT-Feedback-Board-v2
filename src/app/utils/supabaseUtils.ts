@@ -91,18 +91,3 @@ export async function getAccountInfoWithID(
         throw error;
     }
 }
-
-export async function updateFeedbackStatus(
-    supabase: SupabaseClient,
-    feedbackID: number,
-    feedbackStatus: TFeedbackStatus
-) {
-    try {
-        await supabase
-            .from("feedbacks")
-            .update({ feedback_status: feedbackStatus })
-            .eq("feedback_id", feedbackID);
-    } catch (error) {
-        throw error;
-    }
-}
