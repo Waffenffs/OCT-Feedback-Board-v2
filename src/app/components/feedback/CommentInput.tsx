@@ -1,5 +1,5 @@
-import { FiMessageSquare } from "react-icons/fi";
 import { useState } from "react";
+import { FiMessageSquare } from "react-icons/fi";
 import { v4 as uuidv4 } from "uuid";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -24,8 +24,8 @@ export default function CommentInput({
 
     const isDisabled = status === "Flagged" || status === "Resolved" || loading;
     const buttonStyling = isDisabled
-        ? "cursor-not-allowed hover:bg-red-600 hover:shadow-red-500 hover:text-zinc-100"
-        : "hover:bg-blue-500";
+        ? "cursor-not-allowed hover:bg-red-600 hover:shadow-red-500"
+        : "hover:bg-blue-500 hover:shadow-blue-500";
 
     const sendComment = async () => {
         setLoading(true);
@@ -72,7 +72,7 @@ export default function CommentInput({
                 <button
                     onClick={() => sendComment()}
                     disabled={isDisabled}
-                    className={`rounded font-semibold py-1 px-3 tracking-wide bg-zinc-900 text-white transition shadow ${buttonStyling}`}
+                    className={`rounded font-semibold py-1 px-3 tracking-wide bg-zinc-900 text-white transition shadow hover:text-zinc-100 ${buttonStyling}`}
                 >
                     Send
                 </button>
