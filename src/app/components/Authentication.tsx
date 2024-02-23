@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import Container from "./ui/Container";
 import Link from "next/link";
+import Container from "./ui/Container";
 import FormInput from "./ui/FormInput";
 
 type TModes = "login" | "registration" | "department-registration";
@@ -23,7 +23,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
     // # Student
     // hulksmash1337@gmail.com
-    // hulkdestroyeverything
+    // password: hulkdestroyeverything
 
     const [authenticationEmail, setAuthenticationEmail] = useState("");
     const [authenticationPassword, setAuthenticationPassword] = useState("");
