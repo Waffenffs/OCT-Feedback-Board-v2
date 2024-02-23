@@ -119,13 +119,11 @@ export default function Feedback() {
                 key={index}
                 props={comment}
                 status={pageData?.feedback.feedback_status!}
+                refComments={() =>
+                    setRefreshComments((prevState) => !prevState)
+                }
             />
         ));
-
-    // Making a last reviewed status
-    // Should there a be row that when department/admin flags/reviews a feedback, it will add a last reviewed status
-
-    console.log(`Last reviewed at: ${pageData?.feedback.last_reviewed_at}`);
 
     return (
         <div className='w-full h-full py-14 px-10 bg-white mt-5 text-slate-900 rounded-t-[4rem] shadow-2xl'>
