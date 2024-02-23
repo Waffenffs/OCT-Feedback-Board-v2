@@ -66,6 +66,7 @@ export default function SideNavigation() {
             throw `Origin app/components/ui/SideNavigation.tsx >>: ${error}`;
 
         router.refresh();
+        router.replace("/login");
     };
 
     const links = {
@@ -105,7 +106,7 @@ export default function SideNavigation() {
     if (!currentUser && !userAccountType) return <SideNavigationSkeleton />;
 
     return (
-        <nav className='top-0 max-md:w-screen bg-[#1c1c1c] md:h-screen tracking-wide md:flex flex-col justify-between'>
+        <nav className='top-0 max-md:w-screen bg-[#1c1c1c] md:h-screen tracking-wide md:flex flex-col justify-between rounded-tr-xl rounded-br-xl'>
             <div>
                 <div className='w-full flex justify-center items-center py-3 px-8 border-b border-neutral-700'>
                     <img src='/oct-logo.png' alt='logo' className='w-20 h-20' />
