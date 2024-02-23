@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect, useState } from "react";
 
 import Link from "next/link";
 
-import { getAccountInfoWithID } from "@/app/utils/supabaseUtils";
 import {
     getFormattedDate,
     getStatusBackgroundColor,
 } from "@/app/utils/helperUtils";
+import { getAccountInfoWithID } from "@/app/utils/supabaseUtils";
 
 export default function StudentFeedbackCard(props: TFeedback) {
     const [referredDepartmentName, setReferredDepartmentName] = useState<
@@ -57,7 +57,7 @@ export default function StudentFeedbackCard(props: TFeedback) {
                 </div>
             </div>
 
-            <section className='flex flex-col justify-start w-full'>
+            <section className='flex flex-col justify-start w-full overflow-auto'>
                 <div>
                     <Link
                         href={`/feedback/param?id=${props.feedback_id}`}
