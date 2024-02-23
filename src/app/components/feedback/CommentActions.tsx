@@ -1,9 +1,9 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
 
 import { IoClose } from "react-icons/io5";
 import {
@@ -16,6 +16,7 @@ type TCommentActionsProps = {
     props: TComment;
     close: React.Dispatch<React.SetStateAction<boolean>>;
     status: TFeedbackStatus;
+    refComments(): void;
 };
 
 type TUserPrivileges = {
@@ -27,6 +28,7 @@ export default function CommentActions({
     props,
     close,
     status,
+    refComments,
 }: TCommentActionsProps) {
     const [isEditingComment, setIsEditingComment] = useState(false);
     const [removeCommentPressCount, setRemoveCommentPressCount] = useState(0);
@@ -53,16 +55,19 @@ export default function CommentActions({
             const userIsAdministrator =
                 accountInfo?.account_type === "Administrator";
 
+            const commentCreatorPrivileges: TUserPrivileges = {
+                hasEditPrivileges: true,
+                hasRemovePrivileges: true,
+            };
+            const administratorPrivileges: TUserPrivileges = {
+                hasEditPrivileges: false,
+                hasRemovePrivileges: true,
+            };
+
             if (userIsCommentCreator) {
-                setUserPrivileges({
-                    hasEditPrivileges: true,
-                    hasRemovePrivileges: true,
-                });
+                setUserPrivileges(commentCreatorPrivileges);
             } else if (userIsAdministrator) {
-                setUserPrivileges({
-                    hasEditPrivileges: false,
-                    hasRemovePrivileges: false,
-                });
+                setUserPrivileges(administratorPrivileges);
             }
         };
 
@@ -77,6 +82,7 @@ export default function CommentActions({
 
         if (err) throw err;
 
+        refComments();
         close(false);
     };
 
@@ -88,6 +94,7 @@ export default function CommentActions({
 
         if (err) throw err;
 
+        refComments();
         close(false);
     };
 

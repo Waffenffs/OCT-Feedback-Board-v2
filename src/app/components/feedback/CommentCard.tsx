@@ -13,9 +13,14 @@ import CommentActions from "./CommentActions";
 type TCommentCardProps = {
     props: TComment;
     status: TFeedbackStatus;
+    refComments(): void;
 };
 
-export default function CommentCard({ props, status }: TCommentCardProps) {
+export default function CommentCard({
+    props,
+    status,
+    refComments,
+}: TCommentCardProps) {
     const [commentorAccountInfo, setCommentorAccountInfo] =
         useState<TUser | null>(null);
     const [commentActionsActive, setCommentActionsActive] = useState(false);
@@ -53,6 +58,7 @@ export default function CommentCard({ props, status }: TCommentCardProps) {
                     props={props}
                     close={setCommentActionsActive}
                     status={status}
+                    refComments={refComments}
                 />
             )}
             <article className='rounded-md shadow border-2 flex flex-col p-2 justify-start bg-zinc-100'>

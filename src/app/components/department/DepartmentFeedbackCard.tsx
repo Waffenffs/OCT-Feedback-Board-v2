@@ -71,19 +71,11 @@ export default function DepartmentFeedbackCard({
                         </Link>
                     </div>
 
-                    <p className='text-sm text-slate-900 truncate w-[45rem]'>
+                    <p className='text-sm text-slate-900 truncate w-[45rem] overflow-auto'>
                         {feedback.feedback_description}
                     </p>
 
                     <footer className='mt-8'>
-                        {/* {referredDepartmentName ? (
-                            <span className='tracking-wider text-sm text-slate-600 bg-neutral-200 py-1 px-3 rounded'>
-                                Regarding: {referredDepartmentName}
-                            </span>
-                        ) : (
-                            <div className='h-5 mt-3 bg-zinc-200 rounded dark:bg-zinc-400 w-48 animate-pulse'></div>
-                        )} */}
-
                         <section className='mt-2'>
                             <span className='tracking-wider text-sm text-slate-600'>
                                 {formattedDate}
