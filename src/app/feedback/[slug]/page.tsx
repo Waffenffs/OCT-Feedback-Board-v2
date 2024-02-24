@@ -214,6 +214,14 @@ export default function Feedback() {
                     ) : (
                         commentCards
                     )}
+
+                    {!feedbackCommentsExist && (
+                        <div className='w-full flex justify-center items-center rounded py-6 bg-neutral-200'>
+                            <span className='font-bold text-xl tracking-wide text-neutral-400'>
+                                No Content
+                            </span>
+                        </div>
+                    )}
                 </section>
             </section>
         </div>
