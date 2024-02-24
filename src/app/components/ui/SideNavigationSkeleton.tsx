@@ -2,7 +2,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 
 export default function SideNavigationSkeleton() {
     return (
-        <div className='top-0 max-md:w-screen bg-[#1c1c1c] md:h-screen md:flex flex-col justify-between'>
+        <div className='top-0 max-md:w-screen bg-[#1c1c1c] md:h-screen md:flex flex-col justify-between rounded-tr-xl rounded-br-xl'>
             <div>
                 <div className='w-full flex justify-center items-center py-3 px-8 border-b border-neutral-700'>
                     <img src='/oct-logo.png' alt='logo' className='w-20 h-20' />
