@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { PiStudentFill } from "react-icons/pi";
 
-import { getUserInfo, getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
+import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
 
 export default function UpperNavigation() {
     const [accountName, setAccountName] = useState<string | null>(null);
