@@ -2,30 +2,58 @@
 
 import { useState } from "react";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import FormInput from "@/app/components/ui/FormInput";
 
 export default function PasswordSection() {
-    const [userPassword, setUserPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [
+        confirmPasswordChangeClickCount,
+        setConfirmPasswordChangeClickCount,
+    ] = useState(0);
 
-    // todo:
-    // 1. add some stylings, PLEASE
+    const supabase = createClientComponentClient();
 
-    // Feats:
-    // --> If confirmNewPassword != newPassword > invalid
-    // --> If userPassword is falsey > invalid
+    const isSamePassword =
+        newPassword === confirmNewPassword && newPassword.length >= 6;
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (isSamePassword) {
+            if (confirmPasswordChangeClickCount === 1) {
+                // Do the stuff here
+                const { error: err } = await supabase.auth.updateUser({
+                    password: newPassword,
+                });
+
+                if (err) console.error("Error changing the password!");
+
+                setNewPassword("");
+                setConfirmNewPassword("");
+            } else {
+                setConfirmPasswordChangeClickCount(1); // Double-clicked
+
+                const unsubscribe = setTimeout(() => {
+                    setConfirmPasswordChangeClickCount(0); // Reset count
+                }, 2500);
+
+                return () => clearTimeout(unsubscribe); // To avoid memory leaks
+            }
+        } else {
+            console.error("Invalid password fields! Try again!");
+        }
+    };
+
+    // There should be a pop-up that says `Successfully changed password`
 
     return (
-        <section className='flex flex-col gap-2 justify-start w-80 mt-3'>
-            <FormInput
-                title='Your Password'
-                type='password'
-                value={userPassword}
-                name='your-password'
-                onChange={setUserPassword}
-            />
-
+        <form
+            onSubmit={(e) => handleSubmit(e)}
+            className='flex flex-col gap-2 justify-start w-80 mt-3 border py-5 px-8 rounded-md bg--100'
+        >
             <FormInput
                 title='New Password'
                 type='password'
@@ -41,6 +69,19 @@ export default function PasswordSection() {
                 name='confirm'
                 onChange={setConfirmNewPassword}
             />
-        </section>
+            <footer className='w-full flex justify-end items-center mt-4'>
+                <button
+                    className={`transition duration-150 py-1 px-3 font-semibold rounded shadow ${
+                        confirmPasswordChangeClickCount === 0
+                            ? "bg-blue-500"
+                            : "bg-green-500"
+                    } text-white tracking-wide`}
+                >
+                    {confirmPasswordChangeClickCount === 0
+                        ? "Change"
+                        : "Confirm"}
+                </button>
+            </footer>
+        </form>
     );
 }
