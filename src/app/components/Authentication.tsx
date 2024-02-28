@@ -23,7 +23,11 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
     // # Student
     // hulksmash1337@gmail.com
-    // password: hulkdestroyeverything
+    // new password: hulkloveverything (changed)
+
+    // # Administrator
+    // demoadministrator@gmail.com
+    // password: bruteforcergmail
 
     const [authenticationEmail, setAuthenticationEmail] = useState("");
     const [authenticationPassword, setAuthenticationPassword] = useState("");

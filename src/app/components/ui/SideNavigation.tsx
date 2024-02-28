@@ -13,7 +13,6 @@ import {
 import { LuLayoutDashboard } from "react-icons/lu";
 
 import Link from "next/link";
-
 import SideNavigationSkeleton from "./SideNavigationSkeleton";
 
 import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
@@ -99,7 +98,13 @@ export default function SideNavigation() {
                 icon: <IoSettingsOutline />,
             },
         ],
-        Administrator: [],
+        Administrator: [
+            {
+                href: "/administrator",
+                label: "Dashboard",
+                icon: <LuLayoutDashboard />,
+            },
+        ],
     };
 
     // Is loading

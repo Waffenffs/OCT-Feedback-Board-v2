@@ -14,7 +14,7 @@ export default async function Settings() {
         <div className='w-full h-full flex justify-center items-center text-slate-700'>
             <article className='w-4/5 bg-white rounded-md shadow-xl'>
                 <header className='w-full h-40 rounded-t-md bg-gradient-to-r from-green-500 via-lime-500 to-lime-500 flex justify-start items-center pl-5'>
-                    <h1 className='text-5xl font-bold tracking-wider text-white italic'>
+                    <h1 className='text-5xl font-bold tracking-tight text-white italic'>
                         Settings
                     </h1>
                 </header>

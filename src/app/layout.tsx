@@ -17,9 +17,6 @@ export const metadata: Metadata = {
     "capstone",
     "project",
   ],
-  openGraph: {
-    images: "/oct-logo.png",
-  },
 };
 
 const inter = Inter({

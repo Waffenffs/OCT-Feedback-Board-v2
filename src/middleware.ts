@@ -8,7 +8,6 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-
     const res = NextResponse.next();
     const supabase = createMiddlewareClient({ req, res });
 
@@ -25,19 +24,16 @@ export async function middleware(req: NextRequest) {
         data: { session },
         error: error_one,
     } = await supabase.auth.getSession();
-
     const sessionCookies = {
         name: `sb-${supabaseURL}-auth-token`,
         value: JSON.stringify(session),
         path: "/",
     };
-
     res.cookies.set(sessionCookies);
 
     if (error_one) {
         console.error(`Error 1 triggered`);
     }
-
     if (!session) return NextResponse.redirect(new URL(`/login`, req.url));
 
     const {
@@ -48,12 +44,11 @@ export async function middleware(req: NextRequest) {
 
     // Redirect user to `/` path to be rerouted to appropriate type (Department, Student, and Admin)
     if (req.nextUrl.pathname === "/") {
-        if (accountType !== "Administrator") {
-            return NextResponse.redirect(
-                new URL(`/${accountType?.toLowerCase()}`, req.url)
-            );
-        }
+        return NextResponse.redirect(
+            new URL(`/${accountType.toLowerCase()}`, req.url)
+        );
     }
+
     if (req.nextUrl.pathname.startsWith("/feedback")) {
         const feedbackID = getFeedbackIDValue(req.url);
         const {
