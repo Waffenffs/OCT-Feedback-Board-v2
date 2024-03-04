@@ -11,6 +11,7 @@ import {
     IoSettingsOutline,
 } from "react-icons/io5";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { TbReport } from "react-icons/tb";
 
 import Link from "next/link";
 import SideNavigationSkeleton from "./SideNavigationSkeleton";
@@ -103,6 +104,11 @@ export default function SideNavigation() {
                 href: "/administrator",
                 label: "Dashboard",
                 icon: <LuLayoutDashboard />,
+            },
+            {
+                href: "/administrator/reports",
+                label: "Reports",
+                icon: <TbReport />,
             },
         ],
     };

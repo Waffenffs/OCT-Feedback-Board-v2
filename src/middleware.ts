@@ -91,15 +91,6 @@ export async function middleware(req: NextRequest) {
     }
 }
 
-function getFeedbackIDValue(url: string) {
-    const urlParts = url.split("/");
-    const lastPart = urlParts.at(-1);
-    const idParam = lastPart?.split("?")[1];
-    const idValue = idParam?.split("=")[1];
-
-    return idValue;
-}
-
 async function fetchUserCredentials(supabase: SupabaseClient) {
     const {
         data: { session },
@@ -146,4 +137,13 @@ async function fetchFeedbackCredentials(
     };
 
     return feedbackCredentials;
+}
+
+function getFeedbackIDValue(url: string) {
+    const urlParts = url.split("/");
+    const lastPart = urlParts.at(-1);
+    const idParam = lastPart?.split("?")[1];
+    const idValue = idParam?.split("=")[1];
+
+    return idValue;
 }

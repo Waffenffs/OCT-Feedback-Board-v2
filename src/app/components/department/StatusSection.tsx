@@ -1,7 +1,7 @@
 type TStatusSectionProps = {
     status: TFeedbackStatus;
     marginTop?: number;
-    feedbackCount: number;
+    feedbackCount?: number;
 };
 
 export default function StatusSection({
