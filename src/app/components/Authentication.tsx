@@ -8,7 +8,9 @@ import Link from "next/link";
 import Container from "./ui/Container";
 import FormInput from "./ui/FormInput";
 
-type TModes = "login" | "registration" | "department-registration";
+import { isValid } from "@/app/utils/helperUtils";
+
+export type TModes = "login" | "registration" | "department-registration";
 
 type TAuthenticationProps = {
     mode: TModes;
@@ -29,20 +31,20 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     // demoadministrator@gmail.com
     // password: bruteforcergmail
 
-    const [authenticationEmail, setAuthenticationEmail] = useState("");
-    const [authenticationPassword, setAuthenticationPassword] = useState("");
+    const [authEmail, setAuthEmail] = useState("");
+    const [authPassword, setAuthPassword] = useState("");
+    const [confirmAuthPassword, setConfirmAuthPassword] = useState("");
     const [departmentName, setDepartmentName] = useState("");
     const [loading, setLoading] = useState(false);
+    const [authError, setAuthError] = useState(false);
 
     const router = useRouter();
     const supabase = createClientComponentClient();
 
     const signUp = async () => {
-        setLoading(true);
-
         const { data, error } = await supabase.auth.signUp({
-            email: authenticationEmail,
-            password: authenticationPassword,
+            email: authEmail,
+            password: authPassword,
             // options: {
             //     emailRedirectTo: ''
             // }
@@ -74,12 +76,48 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         router.push("/");
     };
 
+    const handleSignUp = async () => {
+        setLoading(true);
+
+        if (
+            authPassword !== confirmAuthPassword ||
+            !isValid(authPassword, "password") ||
+            !isValid(authEmail, "email")
+        ) {
+            if (!isValid(authEmail, "email")) {
+                console.error(
+                    "Invalid email address! Please use the email provided to you by OCT!"
+                );
+            } else if (authPassword !== confirmAuthPassword) {
+                console.error("Passwords do not match!");
+            } else if (!isValid(authPassword, "password")) {
+                console.error(
+                    "Password must be at least 6 characters and contain 1 uppercase letter and symbol!"
+                );
+            }
+
+            setLoading(false);
+            setAuthError(true);
+
+            const unsubscribe = setTimeout(() => {
+                setAuthError(false);
+            }, 2500);
+
+            () => clearTimeout(unsubscribe);
+
+            return;
+        }
+
+        // Registration passed all the checks
+        signUp();
+    };
+
     const departmentSignUp = async () => {
         setLoading(true);
 
         const { data, error: signup_error } = await supabase.auth.signUp({
-            email: authenticationEmail,
-            password: authenticationPassword,
+            email: authEmail,
+            password: authPassword,
         });
 
         if (signup_error)
@@ -108,8 +146,8 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         setLoading(true);
 
         const { error } = await supabase.auth.signInWithPassword({
-            email: authenticationEmail,
-            password: authenticationPassword,
+            email: authEmail,
+            password: authPassword,
         });
 
         setLoading(false);
@@ -122,7 +160,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
     const authActions: Record<TModes, () => Promise<void>> = {
         login: () => signIn(),
-        registration: () => signUp(),
+        registration: () => handleSignUp(),
         "department-registration": () => departmentSignUp(),
     };
 
@@ -140,6 +178,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 <section className='flex flex-col gap-3 px-9 py-16'>
                     {mode === "department-registration" && (
                         <FormInput
+                            mode={mode}
                             title='Department Name'
                             placeholder=''
                             type='text'
@@ -150,22 +189,39 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     )}
 
                     <FormInput
+                        tooltipType='email'
+                        mode={mode}
                         title='Email'
                         placeholder=''
                         type='email'
                         name='email'
-                        value={authenticationEmail}
-                        onChange={setAuthenticationEmail}
+                        value={authEmail}
+                        onChange={setAuthEmail}
                     />
 
                     <FormInput
+                        tooltipType='password'
+                        mode={mode}
                         title='Password'
                         placeholder=''
                         type='password'
                         name='password'
-                        value={authenticationPassword}
-                        onChange={setAuthenticationPassword}
+                        value={authPassword}
+                        onChange={setAuthPassword}
                     />
+
+                    {mode === "registration" && (
+                        <FormInput
+                            tooltipType='password'
+                            mode={mode}
+                            title='Confirm Password'
+                            placeholder=''
+                            type='password'
+                            name='password'
+                            value={confirmAuthPassword}
+                            onChange={setConfirmAuthPassword}
+                        />
+                    )}
 
                     <button
                         onClick={() => authActions[mode]()}
@@ -174,7 +230,10 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                             loading
                                 ? "bg-green-700 text-slate-200 border-green-400"
                                 : "bg-green-500"
-                        } hover:bg-green-700 hover:text-slate-200 border border-green-500 transition ease-in-out duration-300 text-center w-full py-2 mt-5`}
+                        } ${
+                            authError &&
+                            "bg-red-500 border-red-400 hover:bg-red-600"
+                        } hover:bg-green-700 hover:text-slate-200 border-2 border-green-500 transition ease-in-out duration-300 text-center w-full py-2 mt-5`}
                     >
                         {mode === "login" ? "Login" : "Register"}
                     </button>

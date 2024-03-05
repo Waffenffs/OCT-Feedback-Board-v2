@@ -43,3 +43,20 @@ export function getStatusBackgroundColor(status: TFeedbackStatus) {
 
     return statusBackgroundColors[status];
 }
+
+export function isValid(arg: string, mode: "password" | "email") {
+    // Must satisfy these criterias:
+    // - 1 uppercase letter
+    // - 1 special character (non-alphanumeric or underscore)
+    // - Minimum 6 characters
+    const passwordPattern = /^(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+    // Must specify this criteria:
+    // - Email must match @olivarezcollegetagaytay.edu.ph
+    const emailPattern = /^.*@olivarezcollegetagaytay\.edu\.ph$/;
+
+    if (mode === "password") {
+        return passwordPattern.test(arg);
+    } else {
+        return emailPattern.test(arg);
+    }
+}

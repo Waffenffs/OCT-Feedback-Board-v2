@@ -1,16 +1,37 @@
+import type { TModes } from "@/app/components/Authentication";
+
+import Tooltip from "@/app/components/ui/Tooltip";
+
+type TTooltipType = "password" | "email";
+
 type TFormInputProps = {
     title: string;
     placeholder?: string;
+    tooltipType?: TTooltipType;
     type: "text" | "password" | "email";
+    mode: TModes;
     value: string;
     name: string;
     onChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function FormInput(props: TFormInputProps) {
+    const tooltipContent: Record<TTooltipType, string> = {
+        password:
+            "Password must have a minimum of 6 characters with 1 uppercase letter and 1 special character",
+        email: "Email must match @olivarezcollegetagaytay.edu.ph",
+    };
+
     return (
         <div className='w-full flex flex-col gap-1 justify-start text-slate-800'>
-            <h1 className='font-semibold tracking-wide'>{props.title}</h1>
+            <div className='flex flex-row items-center gap-2'>
+                <h1 className='font-semibold tracking-wide'>{props.title}</h1>
+                {props.tooltipType &&
+                    (props.mode === "registration" ||
+                        props.mode === "department-registration") && (
+                        <Tooltip content={tooltipContent[props.tooltipType]} />
+                    )}
+            </div>
             <input
                 type={props.type}
                 placeholder={
