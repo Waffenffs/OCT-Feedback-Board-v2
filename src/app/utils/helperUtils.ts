@@ -52,11 +52,12 @@ export function isValid(arg: string, mode: "password" | "email") {
     const passwordPattern = /^(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
     // Must specify this criteria:
     // - Email must match @olivarezcollegetagaytay.edu.ph
-    const emailPattern = /^.*@olivarezcollegetagaytay\.edu\.ph$/;
+    const emailPattern = /.*@olivarezcollegetagaytay\.edu\.ph/i;
 
     if (mode === "password") {
         return passwordPattern.test(arg);
-    } else {
+    }
+    if (mode === "email") {
         return emailPattern.test(arg);
     }
 }

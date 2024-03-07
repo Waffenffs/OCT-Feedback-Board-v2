@@ -80,7 +80,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         setLoading(true);
 
         const passwordIsNotValid = !isValid(authPassword, "password");
-        const emailIsNotValid = !isValid(authPassword, "email");
+        const emailIsNotValid = !isValid(authEmail, "email");
         const isNotSamePassword = authPassword !== confirmAuthPassword;
 
         if (isNotSamePassword || passwordIsNotValid || emailIsNotValid) {

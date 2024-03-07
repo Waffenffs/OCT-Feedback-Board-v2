@@ -2,7 +2,6 @@ import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-import AccountSection from "@/app/components/settings/AccountSection";
 import PasswordSection from "@/app/components/settings/PasswordSection";
 
 export default async function Settings() {
@@ -26,13 +25,6 @@ export default async function Settings() {
                             Password
                         </h3>
                         <PasswordSection />
-                    </section>
-
-                    <section>
-                        <h3 className='font-semibold tracking-wider text'>
-                            Account
-                        </h3>
-                        <AccountSection />
                     </section>
                 </div>
             </article>
