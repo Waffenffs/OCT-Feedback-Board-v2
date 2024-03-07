@@ -36,7 +36,7 @@ export default function PageFlag({ status, last_reviewed_at }: TPageFlagProps) {
                 <span>{flagProperties[status].comment}</span>
             </div>
             <span>
-                Last reviewed at:{" "}
+                Last reviewed in:{" "}
                 {last_reviewed_at ? getFormattedDate(last_reviewed_at) : "N/A"}
             </span>
         </article>

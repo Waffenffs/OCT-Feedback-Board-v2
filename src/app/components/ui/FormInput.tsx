@@ -9,7 +9,7 @@ type TFormInputProps = {
     placeholder?: string;
     tooltipType?: TTooltipType;
     type: "text" | "password" | "email";
-    mode: TModes;
+    mode?: TModes;
     value: string;
     name: string;
     onChange: React.Dispatch<React.SetStateAction<string>>;

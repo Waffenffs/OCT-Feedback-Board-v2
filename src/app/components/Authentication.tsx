@@ -79,18 +79,19 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     const handleSignUp = async () => {
         setLoading(true);
 
-        if (
-            authPassword !== confirmAuthPassword ||
-            !isValid(authPassword, "password") ||
-            !isValid(authEmail, "email")
-        ) {
-            if (!isValid(authEmail, "email")) {
+        const passwordIsNotValid = !isValid(authPassword, "password");
+        const emailIsNotValid = !isValid(authPassword, "email");
+        const isNotSamePassword = authPassword !== confirmAuthPassword;
+
+        if (isNotSamePassword || passwordIsNotValid || emailIsNotValid) {
+            // Error messages
+            if (emailIsNotValid) {
                 console.error(
                     "Invalid email address! Please use the email provided to you by OCT!"
                 );
-            } else if (authPassword !== confirmAuthPassword) {
+            } else if (isNotSamePassword) {
                 console.error("Passwords do not match!");
-            } else if (!isValid(authPassword, "password")) {
+            } else if (passwordIsNotValid) {
                 console.error(
                     "Password must be at least 6 characters and contain 1 uppercase letter and symbol!"
                 );

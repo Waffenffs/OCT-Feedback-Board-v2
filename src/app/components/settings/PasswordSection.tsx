@@ -7,9 +7,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import FormInput from "@/app/components/ui/FormInput";
 
 export default function PasswordSection() {
-    // TO-DO:
-    // 1. There should be loading state for button
-
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
     const [
@@ -53,7 +50,7 @@ export default function PasswordSection() {
     return (
         <form
             onSubmit={(e) => handleSubmit(e)}
-            className='flex flex-col gap-2 justify-start w-80 mt-3 border py-5 px-8 rounded-md bg--100'
+            className='flex flex-col gap-2 justify-start w-80 mt-3 border py-5 px-8 rounded-md bg-neutral-100'
         >
             <FormInput
                 title='New Password'
@@ -71,7 +68,7 @@ export default function PasswordSection() {
                 onChange={setConfirmNewPassword}
             />
 
-            <footer className='w-full flex justify-end items-center mt-4'>
+            <footer className='w-full flex justify-start items-center mt-4'>
                 <button
                     className={`transition duration-150 py-1 px-3 font-semibold rounded ${
                         confirmPasswordChangeClickCount === 0
