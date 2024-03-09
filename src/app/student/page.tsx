@@ -3,6 +3,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 
+import NoContent from "@/app/components/ui/NoContent";
 import StudentFeedbackCard from "../components/student/StudentFeedbackCard";
 import FilterMenu from "../components/ui/FilterMenu";
 
@@ -103,6 +104,8 @@ export default function Student() {
         fetchData();
     };
 
+    const studentFeedbacksExist = feedbacks && feedbacks?.length >= 1;
+
     if (isLoading)
         return (
             <main className='w-full h-full p-10 overflow-x-hidden overflow-y-auto flex flex-col gap-8 animate-pulse'>
@@ -122,7 +125,7 @@ export default function Student() {
             </main>
         );
 
-    const studentFeedbackCards = feedbacks.map(
+    const studentFeedbackCards = feedbacks?.map(
         (feedback: TFeedback, index: number) => (
             <StudentFeedbackCard
                 key={index}
@@ -169,7 +172,7 @@ export default function Student() {
             </header>
 
             <section className='flex flex-col gap-1'>
-                {studentFeedbackCards}
+                {!studentFeedbacksExist ? <NoContent /> : studentFeedbackCards}
             </section>
         </main>
     );

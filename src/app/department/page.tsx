@@ -1,15 +1,16 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import StatusSection from "../components/department/StatusSection";
+import NoContent from "@/app/components/ui/NoContent";
 import DepartmentFeedbackCard from "../components/department/DepartmentFeedbackCard";
+import StatusSection from "../components/department/StatusSection";
 
 import {
-    getUserInfo,
     getAccountInfoWithUID,
     getReferencedFeedbacks,
+    getUserInfo,
 } from "../utils/supabaseUtils";
 
 export default function Department() {
@@ -81,28 +82,40 @@ export default function Department() {
         <main className='w-full h-full p-10'>
             <StatusSection
                 status='Pending'
-                feedbackCount={pendingFeedbacks?.length}
+                feedbackCount={pendingFeedbacks?.length || 0}
             />
             <section className='flex flex-col gap-1 w-full'>
-                {pendingFeedbacks}
+                {pendingFeedbacks?.length >= 1 ? (
+                    pendingFeedbacks
+                ) : (
+                    <NoContent />
+                )}
             </section>
 
             <StatusSection
                 status='Resolved'
                 marginTop={10}
-                feedbackCount={resolvedFeedbacks?.length}
+                feedbackCount={resolvedFeedbacks?.length || 0}
             />
             <section className='flex flex-col gap-1 w-full'>
-                {resolvedFeedbacks}
+                {resolvedFeedbacks?.length >= 1 ? (
+                    resolvedFeedbacks
+                ) : (
+                    <NoContent />
+                )}
             </section>
 
             <StatusSection
                 status='Flagged'
                 marginTop={10}
-                feedbackCount={flaggedFeedbacks?.length}
+                feedbackCount={flaggedFeedbacks?.length || 0}
             />
             <section className='flex flex-col gap-1 w-full mb-10'>
-                {flaggedFeedbacks}
+                {flaggedFeedbacks?.length >= 1 ? (
+                    flaggedFeedbacks
+                ) : (
+                    <NoContent />
+                )}
             </section>
         </main>
     );

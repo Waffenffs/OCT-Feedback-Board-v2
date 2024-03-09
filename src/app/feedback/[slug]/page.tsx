@@ -11,6 +11,7 @@ import CommentCard from "@/app/components/feedback/CommentCard";
 import CommentInput from "@/app/components/feedback/CommentInput";
 import CommentSkeleton from "@/app/components/feedback/CommentSkeleton";
 import FeedbackSkeleton from "@/app/components/feedback/FeedbackSkeleton";
+import NoContent from "@/app/components/ui/NoContent";
 import PageFlag from "@/app/components/ui/PageFlag";
 import Link from "next/link";
 
@@ -215,13 +216,7 @@ export default function Feedback() {
                         commentCards
                     )}
 
-                    {!feedbackCommentsExist && (
-                        <div className='w-full flex justify-center items-center rounded py-6 bg-neutral-200'>
-                            <span className='font-bold text-xl tracking-wide text-neutral-400'>
-                                No Content
-                            </span>
-                        </div>
-                    )}
+                    {!feedbackCommentsExist && <NoContent />}
                 </section>
             </section>
         </div>
