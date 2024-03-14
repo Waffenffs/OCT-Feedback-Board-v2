@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
+/** Gets the session of the logged in user. */
 export async function getUserInfo(supabase: SupabaseClient) {
     try {
         const {
@@ -12,6 +13,7 @@ export async function getUserInfo(supabase: SupabaseClient) {
     }
 }
 
+/** Gets the data of a feedback using their `feedback_id` property. */
 export async function getFeedbackData(
     supabase: SupabaseClient,
     feedbackId: string
@@ -32,6 +34,7 @@ export async function getFeedbackData(
     }
 }
 
+/** Gets referenced feedbacks data for department users through their `account_id` property. */
 export async function getReferencedFeedbacks(
     supabase: SupabaseClient,
     accountID: number
@@ -52,6 +55,7 @@ export async function getReferencedFeedbacks(
     }
 }
 
+/** Gets the data of a user using their `account_uid` property. */
 export async function getAccountInfoWithUID(
     supabase: SupabaseClient,
     accountUID: string
@@ -72,6 +76,7 @@ export async function getAccountInfoWithUID(
     }
 }
 
+/** Gets the data of a user using their `account_id` property. */
 export async function getAccountInfoWithID(
     supabase: SupabaseClient,
     accountID: number

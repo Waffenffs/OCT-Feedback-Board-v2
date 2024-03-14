@@ -1,3 +1,4 @@
+/** Returns formatted date. */
 export function getFormattedDate(
     feedback_created_at: string,
     options?: { with_created: boolean }
@@ -24,6 +25,7 @@ export function getFormattedDate(
     ];
 
     const feedbackTimestamp = new Date(feedback_created_at);
+
     const formattedDate = `${months[feedbackTimestamp.getMonth()]} ${
         feedbackTimestamp.getDay() === 0 ? 1 : feedbackTimestamp.getDay()
     }, ${feedbackTimestamp.getFullYear()}`;
@@ -34,6 +36,7 @@ export function getFormattedDate(
     return formattedDate;
 }
 
+/** Returns corresponding Tailwind CSS colors for given status. */
 export function getStatusBackgroundColor(status: TFeedbackStatus) {
     const statusBackgroundColors: Record<TFeedbackStatus, string> = {
         Pending: "bg-gradient-to-b from-orange-400 to-orange-600",
@@ -44,6 +47,7 @@ export function getStatusBackgroundColor(status: TFeedbackStatus) {
     return statusBackgroundColors[status];
 }
 
+/** Returns whether password or email is valid. */
 export function isValid(arg: string, mode: "password" | "email") {
     // Must satisfy these criterias:
     // - 1 uppercase letter

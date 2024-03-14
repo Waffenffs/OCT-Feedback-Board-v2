@@ -33,6 +33,6 @@ declare global {
         account_type: TAccountType;
     };
 
-    // BELOW are Types that inherit properties from the above
+    // Below are types that inherit properties from the above
     type TFeedbackStatusWithAll = TFeedbackStatus | "All";
 }
