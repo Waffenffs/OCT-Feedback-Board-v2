@@ -6,11 +6,7 @@ import { useEffect, useState } from "react";
 import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
 
 import { IoClose } from "react-icons/io5";
-import {
-    MdDeleteOutline,
-    MdOutlineEdit,
-    MdOutlineReport,
-} from "react-icons/md";
+import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 
 type TCommentActionsProps = {
     props: TComment;
@@ -98,10 +94,6 @@ export default function CommentActions({
         close(false);
     };
 
-    const reportComment = () => {
-        // Work on this !
-    };
-
     const handleRemoveCommentClick = () => {
         if (removeCommentPressCount === 1) {
             // User has confirmed to delete the comment
@@ -172,11 +164,6 @@ export default function CommentActions({
                                     <MdDeleteOutline className='text-xl' />
                                 </button>
                             )}
-
-                            <button className='bg-zinc-800 text-slate-400 transition delay-100 hover:bg-zinc-700 hover:text-slate-300 text-sm border border-green-700 flex justify-between items-center rounded-md px-4 py-2'>
-                                <span>Report</span>
-                                <MdOutlineReport className='text-xl' />
-                            </button>
                         </>
                     ) : (
                         <form
