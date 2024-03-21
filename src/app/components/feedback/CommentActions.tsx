@@ -98,6 +98,10 @@ export default function CommentActions({
         close(false);
     };
 
+    const reportComment = () => {
+        // Work on this !
+    };
+
     const handleRemoveCommentClick = () => {
         if (removeCommentPressCount === 1) {
             // User has confirmed to delete the comment
