@@ -2,12 +2,11 @@
 
 import { getReferencedFeedbacks } from "@/app/utils/supabaseUtils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect, useState } from "react";
 
 import { getStatusBackgroundColor } from "@/app/utils/helperUtils";
 
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
-
-import { useEffect, useState } from "react";
 
 type TDepartmentFeedbackDataProps = {
     total: Record<TFeedbackStatus, number>;
