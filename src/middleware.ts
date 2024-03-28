@@ -25,15 +25,6 @@ export async function middleware(req: NextRequest) {
         return res;
     }
 
-    // if (
-    //     req.nextUrl.pathname === "/login" ||
-    //     req.nextUrl.pathname === "/register" ||
-    //     req.nextUrl.pathname === "/department-register" ||
-    //     req.nextUrl.pathname.startsWith("/_next") // To load files and CSS
-    // ) {
-    //     return res;
-    // }
-
     const {
         data: { session },
         error: error_one,
@@ -56,7 +47,7 @@ export async function middleware(req: NextRequest) {
         account_uid: accountUID,
     } = await fetchUserCredentials(supabase);
 
-    // Redirect user to `/` path to be rerouted to appropriate type (Department, Student, and Admin)
+    // Redirect user to `/` path to be rerouted to appropriate type (Department, Student, and Administrator)
     if (req.nextUrl.pathname === "/") {
         return NextResponse.redirect(
             new URL(`/${accountType.toLowerCase()}`, req.url)
@@ -98,10 +89,12 @@ export async function middleware(req: NextRequest) {
         "/administrator": "Administrator",
     };
     const requiredAccountType = pathRequiresAccountType[req.nextUrl.pathname];
-    if (requiredAccountType && accountType !== requiredAccountType) {
-        return NextResponse.redirect(
-            new URL(`/${accountType?.toLowerCase()}`, req.url)
-        );
+    if (requiredAccountType) {
+        if (accountType !== requiredAccountType) {
+            return NextResponse.redirect(
+                new URL(`/${accountType?.toLowerCase()}`, req.url)
+            );
+        }
     }
 }
 
@@ -123,10 +116,7 @@ async function fetchUserCredentials(supabase: SupabaseClient) {
     const userCredentials = {
         account_id: user_credentials[0]?.account_id,
         account_uid: user_credentials[0]?.account_uid,
-        account_type: user_credentials[0]?.account_type as
-            | "Department"
-            | "Student"
-            | "Administrator",
+        account_type: user_credentials[0]?.account_type as TAccountType,
     };
 
     return userCredentials;
