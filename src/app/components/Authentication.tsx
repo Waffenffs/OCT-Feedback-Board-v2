@@ -84,7 +84,6 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         const isNotSamePassword = authPassword !== confirmAuthPassword;
 
         if (isNotSamePassword || passwordIsNotValid || emailIsNotValid) {
-            // Error messages
             if (emailIsNotValid) {
                 console.error(
                     "Invalid email address! Please use the email provided to you by OCT!"

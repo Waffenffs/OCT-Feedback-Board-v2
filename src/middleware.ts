@@ -11,14 +11,28 @@ export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
     const supabase = createMiddlewareClient({ req, res });
 
+    const resourcePaths: string[] = [
+        "/login",
+        "/register",
+        "/department-register",
+    ];
+
+    // To load resources like CSS and necessary files
     if (
-        req.nextUrl.pathname === "/login" ||
-        req.nextUrl.pathname === "/register" ||
-        req.nextUrl.pathname === "/department-register" ||
-        req.nextUrl.pathname.startsWith("/_next") // To load files and CSS
+        resourcePaths.includes(req.nextUrl.pathname) ||
+        req.nextUrl.pathname.startsWith("/_next")
     ) {
         return res;
     }
+
+    // if (
+    //     req.nextUrl.pathname === "/login" ||
+    //     req.nextUrl.pathname === "/register" ||
+    //     req.nextUrl.pathname === "/department-register" ||
+    //     req.nextUrl.pathname.startsWith("/_next") // To load files and CSS
+    // ) {
+    //     return res;
+    // }
 
     const {
         data: { session },
@@ -81,9 +95,9 @@ export async function middleware(req: NextRequest) {
     const pathRequiresAccountType: Record<string, string> = {
         "/department": "Department",
         "/student": "Student",
+        "/administrator": "Administrator",
     };
     const requiredAccountType = pathRequiresAccountType[req.nextUrl.pathname];
-
     if (requiredAccountType && accountType !== requiredAccountType) {
         return NextResponse.redirect(
             new URL(`/${accountType?.toLowerCase()}`, req.url)
@@ -96,16 +110,14 @@ async function fetchUserCredentials(supabase: SupabaseClient) {
         data: { session },
         error: error_one,
     } = await supabase.auth.getSession();
+    if (error_one) throw error_one;
 
     const user = session?.user;
-
-    if (error_one) throw error_one;
 
     const { data: user_credentials, error: error_two } = await supabase
         .from("accounts")
         .select("account_id, account_uid, account_type")
         .eq("account_uid", user?.id);
-
     if (error_two) throw error_two;
 
     const userCredentials = {
