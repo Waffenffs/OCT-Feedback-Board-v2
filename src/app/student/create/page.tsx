@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect, useState } from "react";
 
 import FormInput from "@/app/components/ui/FormInput";
 
@@ -110,12 +110,11 @@ export default function Create() {
                 />
 
                 <section>
-                    <h1 className='font-semibold tracking-wide text-slate-800'>
+                    <h1 className='font-semibold tracking-wide text-slate-800 text-sm'>
                         Description
                     </h1>
-
                     <textarea
-                        className='mt-1 resize-none overflow-y-hidden text-sm border-2 border-slate-300 rounded w-full py-1 px-2 text-slate-800 focus:outline-none focus:border-blue-500'
+                        className='placeholder:text-sm mt-1 resize-none overflow-y-hidden text-sm border-2 border-slate-300 rounded w-full py-1 px-2 text-slate-800 focus:outline-none focus:border-blue-500'
                         placeholder='Ex. Students will benefit highly from this...'
                         name='feedback_description'
                         value={feedbackDescription}

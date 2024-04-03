@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 /** Gets the session of the logged in user. */
 export async function getUserInfo(supabase: SupabaseClient) {

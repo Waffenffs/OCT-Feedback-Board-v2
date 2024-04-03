@@ -25,7 +25,9 @@ export default function FormInput(props: TFormInputProps) {
     return (
         <div className='w-full flex flex-col gap-1 justify-start text-slate-800'>
             <div className='flex flex-row items-center gap-2'>
-                <h1 className='font-semibold tracking-wide'>{props.title}</h1>
+                <h1 className='font-semibold tracking-wide text-sm'>
+                    {props.title}
+                </h1>
                 {props.tooltipType &&
                     (props.mode === "registration" ||
                         props.mode === "department-registration") && (
@@ -40,7 +42,7 @@ export default function FormInput(props: TFormInputProps) {
                 value={props.value}
                 onChange={(e) => props.onChange(e.target.value)}
                 name={props.name}
-                className='mt-1 text-sm border-2 border-slate-300 rounded py-1 px-2 focus:outline-none focus:border-blue-500'
+                className='placeholder:text-sm mt-1 text-sm border-2 border-slate-300 rounded py-1 px-2 focus:outline-none focus:border-blue-500'
             />
         </div>
     );

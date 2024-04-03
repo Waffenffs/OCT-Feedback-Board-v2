@@ -16,7 +16,6 @@ export async function middleware(req: NextRequest) {
         "/register",
         "/department-register",
     ];
-
     // To load resources like CSS and necessary files
     if (
         resourcePaths.includes(req.nextUrl.pathname) ||
@@ -83,13 +82,14 @@ export async function middleware(req: NextRequest) {
         }
     }
 
-    const pathRequiresAccountType: Record<string, string> = {
+    const pathRequiresAccountType: Record<string, TAccountType> = {
         "/department": "Department",
         "/student": "Student",
         "/administrator": "Administrator",
     };
-    const requiredAccountType = pathRequiresAccountType[req.nextUrl.pathname];
-    if (requiredAccountType) {
+    if (pathRequiresAccountType[req.nextUrl.pathname]) {
+        const requiredAccountType =
+            pathRequiresAccountType[req.nextUrl.pathname];
         if (accountType !== requiredAccountType) {
             return NextResponse.redirect(
                 new URL(`/${accountType?.toLowerCase()}`, req.url)

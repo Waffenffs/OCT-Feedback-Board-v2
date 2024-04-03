@@ -178,7 +178,7 @@ export default function Feedback() {
             )}
 
             <section className='mt-32'>
-                <hr className='w-full h-2 my-5'></hr>
+                <hr className='h-px my-4 bg-green-300 border-0' />
                 <CommentInput
                     status={pageData?.feedback.feedback_status!}
                     feedbackId={pageData?.feedback.feedback_id!}
@@ -201,7 +201,7 @@ export default function Feedback() {
                         <span>Refresh</span>
                     </button>
                 </div>
-                <hr className='h-px mt-4 bg-gray-300 border-0' />
+                <hr className='h-px mt-4 bg-green-300 border-0' />
 
                 <section className='flex flex-col gap-5 mt-7'>
                     {loadingFeedbackComments ? (

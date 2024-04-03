@@ -2,7 +2,6 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
-
 import { PiStudentFill } from "react-icons/pi";
 
 import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
