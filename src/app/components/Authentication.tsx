@@ -20,10 +20,15 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     // # Department
     // octmarketingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
     // password: latenightattentions
-    // ----------------------
-    // # Student
-    // ----------------------
-    // # Administrator
+    // ------
+    // olivareztesdadepartment.olivarezcollegetagaytay.edu.ph@gmail.com
+    // password: sampletestertesdaaccount
+    // ------
+    // olivarezaccountingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
+    // password: sampleaccountingaccount
+    // ------
+    // olivarezmaintenance.olivarezcollegetagaytay.edu.ph@gmail.com
+    // password: samplemaintenanceaccount
 
     const [authEmail, setAuthEmail] = useState("");
     const [authPassword, setAuthPassword] = useState("");
