@@ -54,6 +54,8 @@ export default function PasswordSettings() {
 
         if (error) console.error(`Error changing passwords: ${error}`);
 
+        console.log("Successfully changed user password.");
+
         // Reset states
         setChangePassword("");
         setConfirmPassword("");

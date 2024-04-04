@@ -4,6 +4,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { FaGithub } from "react-icons/fa";
+
+// FIXME
+// This SVG isn't loading properly.
+import ChatBubbleSvg from "../../../public/chatbubble.svg"
+
 import { isValid } from "@/app/utils/helperUtils";
 
 import Link from "next/link";
@@ -158,22 +164,25 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     };
 
     return (
-        <Container stylings='flex flex-col justify-center items-center tracking-wide'>
+        <Container stylings='flex tracking-wide'>
+            <div className="w-1/2 flex justify-center items-center bg-lime-100">
+                {/* Do something here */}
+            </div>
             <form
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
-                className='bg-white shadow-xl rounded md:w-96'
+                className='flex flex-col justify-center items-center bg-white shadow-xl rounded w-1/2'
             >
                 <header className='w-full flex flex-row justify-center items-center gap-2 pt-5 rounded-t text-sm font-semibold'>
-                    <div className='flex flex-row items-center text-center gap-2 bg-gradient-to-br from-amber-500 to-pink-500 rounded-md text-white'>
-                        <h1 className='text-green-500 bg-white px-3 py-1 rounded-md'>
+                    <div className='flex flex-row items-center text-center gap-2 bg-gradient-to-br from-green-500 to-lime-400  rounded-md text-white'>
+                        <h1 className='text-green-500 bg-white px-3 py-1 rounded-md border'>
                             Oliv
                         </h1>
                         <h1 className='pr-3'>Feedbacks</h1>
                     </div>
                 </header>
 
-                <section className='flex flex-col gap-3 px-9 py-10'>
+                <section className='w-[28rem] flex flex-col gap-3 px-9 py-10'>
                     {mode === "department-registration" && (
                         <FormInput
                             mode={mode}
@@ -231,21 +240,37 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         } ${
                             authError &&
                             "bg-red-500 border-red-400 hover:bg-red-600"
-                        } hover:bg-green-700 hover:text-slate-200 border-2 border-green-500 transition ease-in-out duration-300 text-center w-full py-2 mt-8`}
+                        } hover:bg-green-700 hover:text-slate-200 border-2 rounded-full border-green-500 transition ease-in-out duration-300 text-center w-full py-2 mt-16`}
                     >
                         {mode === "login" ? "Login" : "Register"}
                     </button>
                 </section>
 
-                <footer className='w-full flex items-center justify-end px-4 pb-2'>
-                    <Link
-                        href={mode === "login" ? "/register" : "/login"}
-                        className='text-gray-400 font-semibold text-sm'
-                    >
+                <footer className='w-full flex items-center justify-center px-4 pb-2'>
+                    <div className="text-gray-400 text-xs flex flex-row items-center text-center gap-1 text-sm tracking-wide">
                         {mode === "login"
-                            ? "Register an account"
-                            : "Login with an account"}
-                    </Link>
+                            ? (
+                                <>
+                                    <span>Are you new?</span>
+                                    <Link 
+                                        href={"/register"}
+                                    >
+                                        <span className="underline text-green-400 hover:text-green-500">Create an account</span>
+                                    </Link>
+                                </>
+                            )
+                            : (
+                                <>
+                                    <span>Already registered?</span>
+                                    <Link 
+                                        href={"/login"}
+                                    >
+                                        <span className="underline text-green-400 hover:text-green-500">Login with your account</span>
+                                    </Link>
+                                </>
+                            )
+                        }
+                    </div>
                 </footer>
             </form>
         </Container>
