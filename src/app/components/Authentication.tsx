@@ -4,17 +4,16 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import ChatBubbleSvg from "../../../public/chatbubble.svg";
 import { FaGithub } from "react-icons/fa";
-
-// FIXME
-// This SVG isn't loading properly.
-import ChatBubbleSvg from "../../../public/chatbubble.svg"
 
 import { isValid } from "@/app/utils/helperUtils";
 
 import Link from "next/link";
 import Container from "./ui/Container";
 import FormInput from "./ui/FormInput";
+
+import Image from "next/image";
 
 export type TModes = "login" | "registration" | "department-registration";
 
@@ -165,13 +164,21 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
     return (
         <Container stylings='flex tracking-wide'>
-            <div className="w-1/2 flex justify-center items-center bg-lime-100">
-                {/* Do something here */}
+            <div className='w-1/2 flex flex-col justify-center items-center bg-lime-200'>
+                <Image src={ChatBubbleSvg} alt='SVG' width={500} height={500} />
+                <footer className='flex flex-col text-center mt-12 text-slate-800'>
+                    <span className='font-semibold text-3xl '>
+                        Empowering the Olivarian voice
+                    </span>
+                    <span className='mt-2'>
+                        Made for Olivarians, by Olivarians
+                    </span>
+                </footer>
             </div>
             <form
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
-                className='flex flex-col justify-center items-center bg-white shadow-xl rounded w-1/2'
+                className='flex flex-col justify-center items-center bg-white shadow-xl rounded w-1/2 relative'
             >
                 <header className='w-full flex flex-row justify-center items-center gap-2 pt-5 rounded-t text-sm font-semibold'>
                     <div className='flex flex-row items-center text-center gap-2 bg-gradient-to-br from-green-500 to-lime-400  rounded-md text-white'>
@@ -247,29 +254,26 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 </section>
 
                 <footer className='w-full flex items-center justify-center px-4 pb-2'>
-                    <div className="text-gray-400 text-xs flex flex-row items-center text-center gap-1 text-sm tracking-wide">
-                        {mode === "login"
-                            ? (
-                                <>
-                                    <span>Are you new?</span>
-                                    <Link 
-                                        href={"/register"}
-                                    >
-                                        <span className="underline text-green-400 hover:text-green-500">Create an account</span>
-                                    </Link>
-                                </>
-                            )
-                            : (
-                                <>
-                                    <span>Already registered?</span>
-                                    <Link 
-                                        href={"/login"}
-                                    >
-                                        <span className="underline text-green-400 hover:text-green-500">Login with your account</span>
-                                    </Link>
-                                </>
-                            )
-                        }
+                    <div className='text-gray-400 text-sm flex flex-row items-center text-center gap-1 text-sm tracking-wide'>
+                        {mode === "login" ? (
+                            <>
+                                <span>Are you new?</span>
+                                <Link href={"/register"}>
+                                    <span className='underline text-green-400 hover:text-green-500'>
+                                        Create an account
+                                    </span>
+                                </Link>
+                            </>
+                        ) : (
+                            <>
+                                <span>Already registered?</span>
+                                <Link href={"/login"}>
+                                    <span className='underline text-green-400 hover:text-green-500'>
+                                        Login with your account
+                                    </span>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </footer>
             </form>
