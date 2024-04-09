@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import ChatBubbleSvg from "../../../public/chatbubble.svg";
-import { FaGithub } from "react-icons/fa";
 
 import { isValid } from "@/app/utils/helperUtils";
 
@@ -45,6 +44,19 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     const router = useRouter();
     const supabase = createClientComponentClient();
 
+    const handleError = () => {
+        setLoading(false);
+        setAuthError(true);
+
+        const unsubscribe = setTimeout(() => {
+            setAuthError(false);
+        }, 2500);
+
+        () => clearTimeout(unsubscribe);
+
+        return;
+    }
+
     const signUp = async () => {
         const { data, error } = await supabase.auth.signUp({
             email: authEmail,
@@ -67,8 +79,9 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     account_uid: data.user?.id,
                 },
             ]);
-        if (account_error)
+        if (account_error) {
             throw `Origin app/components/Authentication.tsx >>: ${account_error}`;
+        }
 
         setLoading(false);
         router.push("/");
@@ -94,16 +107,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 );
             }
 
-            setLoading(false);
-            setAuthError(true);
-
-            const unsubscribe = setTimeout(() => {
-                setAuthError(false);
-            }, 2500);
-
-            () => clearTimeout(unsubscribe);
-
-            return;
+            handleError()
         }
 
         // Registration passed all the checks
@@ -118,8 +122,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             password: authPassword,
         });
 
-        if (signup_error)
-            throw `Origin app/components/Authentication.tsx >>: ${signup_error}`;
+        if (signup_error) handleError()
 
         const userUID = data.user?.id;
 
@@ -150,8 +153,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
         setLoading(false);
 
-        if (error)
-            throw `Origin app/components/Authentication.tsx >>: ${error}`;
+        if (error) handleError()
 
         router.push("/");
     };
@@ -163,11 +165,11 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     };
 
     return (
-        <Container stylings='flex tracking-wide'>
+        <Container stylings='flex'>
             <div className='w-1/2 flex flex-col justify-center items-center bg-lime-200'>
                 <Image src={ChatBubbleSvg} alt='SVG' width={500} height={500} />
                 <footer className='flex flex-col text-center mt-12 text-slate-800'>
-                    <span className='font-semibold text-3xl '>
+                    <span className='font-semibold text-3xl italic'>
                         Empowering the Olivarian voice
                     </span>
                     <span className='mt-2'>
