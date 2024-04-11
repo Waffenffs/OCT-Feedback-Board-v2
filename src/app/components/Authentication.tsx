@@ -95,8 +95,6 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         const isNotSamePassword = authPassword !== confirmAuthPassword;
         const passwordIsEmpty = authPassword.length <= 3 || confirmAuthPassword.length <= 3
 
-        // if password or confirmpassword is empty, then do it allow it
-
         if (isNotSamePassword || passwordIsNotValid || emailIsNotValid || passwordIsEmpty) {
             if (emailIsNotValid) {
                 console.error(
