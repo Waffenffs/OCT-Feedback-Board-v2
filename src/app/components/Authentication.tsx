@@ -93,8 +93,11 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         const passwordIsNotValid = !isValid(authPassword, "password");
         const emailIsNotValid = !isValid(authEmail, "email");
         const isNotSamePassword = authPassword !== confirmAuthPassword;
+        const passwordIsEmpty = authPassword.length <= 3 || confirmAuthPassword.length <= 3
 
-        if (isNotSamePassword || passwordIsNotValid || emailIsNotValid) {
+        // if password or confirmpassword is empty, then do it allow it
+
+        if (isNotSamePassword || passwordIsNotValid || emailIsNotValid || passwordIsEmpty) {
             if (emailIsNotValid) {
                 console.error(
                     "Invalid email address! Please use the email provided to you by OCT!"
@@ -105,13 +108,15 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 console.error(
                     "Password must be at least 6 characters and contain 1 uppercase letter and symbol!"
                 );
+            } else if (passwordIsEmpty) {
+                console.error("A password field may be empty!");
             }
 
             handleError()
+        } else {
+            // Registration passed all the checks
+            signUp();
         }
-
-        // Registration passed all the checks
-        signUp();
     };
 
     const departmentSignUp = async () => {
