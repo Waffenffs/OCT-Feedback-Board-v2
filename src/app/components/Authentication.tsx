@@ -9,6 +9,7 @@ import ChatBubbleSvg from "../../../public/chatbubble.svg";
 import { isValid } from "@/app/utils/helperUtils";
 
 import Link from "next/link";
+
 import Container from "./ui/Container";
 import FormInput from "./ui/FormInput";
 
@@ -55,7 +56,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         () => clearTimeout(unsubscribe);
 
         return;
-    }
+    };
 
     const signUp = async () => {
         const { data, error } = await supabase.auth.signUp({
@@ -65,7 +66,6 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             //     emailRedirectTo: ''
             // }
         });
-
         if (error) {
             throw error;
         }
@@ -93,9 +93,14 @@ export default function Authentication({ mode }: TAuthenticationProps) {
         const passwordIsNotValid = !isValid(authPassword, "password");
         const emailIsNotValid = !isValid(authEmail, "email");
         const isNotSamePassword = authPassword !== confirmAuthPassword;
-        const passwordIsEmpty = authPassword.length <= 3 || confirmAuthPassword.length <= 3
-
-        if (isNotSamePassword || passwordIsNotValid || emailIsNotValid || passwordIsEmpty) {
+        const passwordIsEmpty =
+            authPassword.length <= 3 || confirmAuthPassword.length <= 3;
+        if (
+            isNotSamePassword ||
+            passwordIsNotValid ||
+            emailIsNotValid ||
+            passwordIsEmpty
+        ) {
             if (emailIsNotValid) {
                 console.error(
                     "Invalid email address! Please use the email provided to you by OCT!"
@@ -110,7 +115,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 console.error("A password field may be empty!");
             }
 
-            handleError()
+            handleError();
         } else {
             // Registration passed all the checks
             signUp();
@@ -125,7 +130,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             password: authPassword,
         });
 
-        if (signup_error) handleError()
+        if (signup_error) handleError();
 
         const userUID = data.user?.id;
 
@@ -156,7 +161,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
         setLoading(false);
 
-        if (error) handleError()
+        if (error) handleError();
 
         router.push("/");
     };
@@ -183,7 +188,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             <form
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
-                className='flex flex-col justify-center items-center bg-white shadow-xl rounded w-1/2 relative'
+                className='flex flex-col justify-center items-center bg-white shadow-xl w-1/2 relative'
             >
                 <header className='w-full flex flex-row justify-center items-center gap-2 pt-5 rounded-t text-sm font-semibold'>
                     <div className='flex flex-row items-center text-center gap-2 bg-gradient-to-br from-green-500 to-lime-400  rounded-md text-white'>
