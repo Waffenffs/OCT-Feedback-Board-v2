@@ -95,11 +95,6 @@ export default function DepartmentCard(props: TUser) {
                             )
                         )}
                     </section>
-                    <footer className='w-full flex items-center justify-start mt-8'>
-                        <button className='rounded-md py-1 px-3 bg-blue-200 transition hover:bg-blue-300 hover:text-white border-2 border-blue-400 text-blue-500 font-semibold text-sm tracking-wider'>
-                            Go-To
-                        </button>
-                    </footer>
                 </>
             )}
         </article>

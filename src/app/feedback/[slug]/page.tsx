@@ -71,13 +71,13 @@ export default function Feedback() {
     useEffect(() => {
         const fetchData = async () => {
             const feedback = await getFeedbackData(supabase, feedbackId!);
-
             if (!feedback) console.error("Feedback data not found!");
 
             const formattedDate = getFormattedDate(
                 feedback?.feedback_created_at!,
                 { with_created: true }
             );
+
             const feedbackData: TFeedback = {
                 ...feedback!,
                 feedback_created_at: formattedDate,
@@ -87,14 +87,12 @@ export default function Feedback() {
                 supabase,
                 feedback?.feedback_creator_uid!
             );
-
             if (!creator) console.error("Creator not found!");
 
             const referredDepartment = await getAccountInfoWithID(
                 supabase,
                 feedbackData?.feedback_reference
             );
-
             if (!referredDepartment)
                 console.error("Referred department not found!");
 

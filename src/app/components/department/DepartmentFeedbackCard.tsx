@@ -34,7 +34,7 @@ export default function DepartmentFeedbackCard({
             .from("feedbacks")
             .update({
                 feedback_status: status,
-                last_reviewed_at: new Date().toISOString(), // Insert current timestamp
+                last_reviewed_at: new Date().toISOString(),
             })
             .eq("feedback_id", feedback.feedback_id);
 

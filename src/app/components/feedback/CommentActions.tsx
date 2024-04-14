@@ -73,7 +73,10 @@ export default function CommentActions({
     const editComment = async () => {
         const { error: err } = await supabase
             .from("comments")
-            .update({ comment_content: defaultEditCommentValue })
+            .update({
+                comment_content: defaultEditCommentValue,
+                last_edited_at: new Date().toISOString(),
+            })
             .eq("comment_uid", props.comment_uid);
 
         if (err) throw err;

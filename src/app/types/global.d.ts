@@ -24,6 +24,7 @@ declare global {
         comment_content: string;
         comment_created_at: string;
         comment_uid: string;
+        last_edited_at: string | null;
     };
 
     type TUser = {

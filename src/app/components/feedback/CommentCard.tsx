@@ -77,8 +77,19 @@ export default function CommentCard({
                 <p className='whitespace-pre mt-4'>{props.comment_content}</p>
                 <hr className='w-full h-2 mt-5'></hr>
                 <footer className='font-semibold text-zinc-500 text-sm flex flex-row gap-2 items-center text-center'>
-                    <span>{getFormattedDate(props.comment_created_at)}</span>
+                    <span>
+                        Created at {getFormattedDate(props.comment_created_at)}
+                    </span>
                     <span>|</span>
+                    {props.last_edited_at !== null && (
+                        <>
+                            <span>
+                                Last edited at{" "}
+                                {getFormattedDate(props.last_edited_at)}
+                            </span>
+                            <span>|</span>
+                        </>
+                    )}
                     <button onClick={() => setCommentActionsActive(true)}>
                         <BsThreeDots className='text-lg text-blue-500' />
                     </button>
