@@ -53,9 +53,10 @@ export default function FormInput(props: TFormInputProps) {
                 />
                 {props.type === "password" && (
                     <button
-                        onClick={() =>
-                            setShowPassword((prevState) => !prevState)
-                        }
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setShowPassword((prevState) => !prevState);
+                        }}
                         className='absolute right-0 text-xl mr-3 transition duration-300'
                     >
                         {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
