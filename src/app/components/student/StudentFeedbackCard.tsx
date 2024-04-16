@@ -42,7 +42,7 @@ export default function StudentFeedbackCard(props: TFeedback) {
     const formattedDate = getFormattedDate(props.feedback_created_at);
 
     return (
-        <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow rounded-md'>
+        <article className='flex flex-row gap-3 text-slate-800 p-5 bg-white shadow rounded-md'>
             <div className='w-6 pt-1 relative'>
                 <div
                     className={`group cursor-default rounded shadow ${statusBackgroundColor}`}
