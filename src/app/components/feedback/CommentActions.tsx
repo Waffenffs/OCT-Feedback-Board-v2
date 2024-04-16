@@ -35,6 +35,8 @@ export default function CommentActions({
     const [defaultEditCommentValue, setDefaultEditCommentValue] = useState(
         props.comment_content
     );
+    const [loading, setLoading] = useState(true);
+
     const supabase = createClientComponentClient();
 
     useEffect(() => {
@@ -59,6 +61,8 @@ export default function CommentActions({
                 hasEditPrivileges: false,
                 hasRemovePrivileges: true,
             };
+
+            setLoading(false);
 
             if (userIsCommentCreator) {
                 setUserPrivileges(commentCreatorPrivileges);
@@ -101,7 +105,6 @@ export default function CommentActions({
         if (removeCommentPressCount === 1) {
             // User has confirmed to delete the comment
             removeComment();
-
             return;
         }
 
@@ -113,8 +116,6 @@ export default function CommentActions({
 
         () => clearTimeout(unsubscribe);
     };
-
-    const showOptions = !isEditingComment;
 
     return (
         <div className='bg-zinc-600/50 fixed top-0 right-0 left-0 flex justify-center items-center w-screen h-screen text-neutral-400'>
@@ -130,7 +131,7 @@ export default function CommentActions({
                 <hr className='w-full h-px rounded mt-4 bg-gray-700 border-0' />
 
                 <div className='w-full flex flex-col gap-2 mt-2'>
-                    {showOptions ? (
+                    {!isEditingComment ? (
                         <>
                             {userPrivileges.hasEditPrivileges && (
                                 <button
@@ -166,6 +167,13 @@ export default function CommentActions({
                                     </span>
                                     <MdDeleteOutline className='text-xl' />
                                 </button>
+                            )}
+
+                            {loading && (
+                                <>
+                                    <div className='animate-pulse h-8 bg-zinc-300 rounded dark:bg-zinc-500 w-full'></div>
+                                    <div className='animate-pulse h-8 bg-zinc-300 rounded dark:bg-zinc-500 w-full'></div>
+                                </>
                             )}
                         </>
                     ) : (
