@@ -27,9 +27,6 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     // octmarketingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
     // password: latenightattentions
     // ------
-    // olivareztesdadepartment.olivarezcollegetagaytay.edu.ph@gmail.com
-    // password: sampletestertesdaaccount
-    // ------
     // olivarezaccountingdepartment.olivarezcollegetagaytay.edu.ph@gmail.com
     // password: sampleaccountingaccount
     // ------
