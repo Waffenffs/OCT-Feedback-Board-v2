@@ -9,6 +9,7 @@ import ChatBubbleSvg from "../../../public/chatbubble.svg";
 import { isValid } from "@/app/utils/helperUtils";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 import Container from "./ui/Container";
 import FormInput from "./ui/FormInput";
@@ -174,7 +175,12 @@ export default function Authentication({ mode }: TAuthenticationProps) {
 
     return (
         <Container stylings='flex'>
-            <div className='w-1/2 flex flex-col justify-center items-center bg-lime-200'>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className='w-1/2 flex flex-col justify-center items-center bg-lime-200'
+            >
                 <Image src={ChatBubbleSvg} alt='SVG' width={500} height={500} />
                 <footer className='flex flex-col text-center mt-12 text-slate-800'>
                     <span className='font-semibold text-3xl italic'>
@@ -184,8 +190,11 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         Made for Olivarians, by Olivarians
                     </span>
                 </footer>
-            </div>
-            <form
+            </motion.div>
+            <motion.form
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
                 className='flex flex-col justify-center items-center bg-white shadow-xl w-1/2 relative'
@@ -286,7 +295,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                         )}
                     </div>
                 </footer>
-            </form>
+            </motion.form>
         </Container>
     );
 }
