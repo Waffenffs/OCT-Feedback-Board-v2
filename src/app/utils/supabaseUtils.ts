@@ -96,3 +96,48 @@ export async function getAccountInfoWithID(
         throw error;
     }
 }
+
+/** Returns the credentials of a feedback given their ID */
+export async function fetchFeedbackCredentials(
+    supabase: SupabaseClient,
+    feedbackID: number
+) {
+    const { data, error } = await supabase
+        .from("feedbacks")
+        .select("feedback_creator_uid, feedback_reference")
+        .eq("feedback_id", feedbackID);
+
+    if (error) throw error;
+
+    const feedbackCredentials = {
+        feedback_creator_uid: data[0]?.feedback_creator_uid,
+        feedback_reference: data[0]?.feedback_reference,
+    };
+
+    return feedbackCredentials;
+}
+
+/** Returns the credentials of current user  */
+export async function fetchUserCredentials(supabase: SupabaseClient) {
+    const {
+        data: { session },
+        error: error_one,
+    } = await supabase.auth.getSession();
+    if (error_one) throw error_one;
+
+    const user = session?.user;
+
+    const { data: user_credentials, error: error_two } = await supabase
+        .from("accounts")
+        .select("account_id, account_uid, account_type")
+        .eq("account_uid", user?.id);
+    if (error_two) throw error_two;
+
+    const userCredentials = {
+        account_id: user_credentials[0]?.account_id,
+        account_uid: user_credentials[0]?.account_uid,
+        account_type: user_credentials[0]?.account_type as TAccountType,
+    };
+
+    return userCredentials;
+}

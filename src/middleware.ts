@@ -1,10 +1,13 @@
-import {
-    SupabaseClient,
-    createMiddlewareClient,
-} from "@supabase/auth-helpers-nextjs";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 
 import type { NextRequest } from "next/server";
+
+import {
+    fetchFeedbackCredentials,
+    fetchUserCredentials,
+} from "@/app/utils/supabaseUtils";
+import { getFeedbackIDValue } from "@/app/utils/helperUtils";
 
 export async function middleware(req: NextRequest) {
     const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -96,56 +99,4 @@ export async function middleware(req: NextRequest) {
             );
         }
     }
-}
-
-async function fetchUserCredentials(supabase: SupabaseClient) {
-    const {
-        data: { session },
-        error: error_one,
-    } = await supabase.auth.getSession();
-    if (error_one) throw error_one;
-
-    const user = session?.user;
-
-    const { data: user_credentials, error: error_two } = await supabase
-        .from("accounts")
-        .select("account_id, account_uid, account_type")
-        .eq("account_uid", user?.id);
-    if (error_two) throw error_two;
-
-    const userCredentials = {
-        account_id: user_credentials[0]?.account_id,
-        account_uid: user_credentials[0]?.account_uid,
-        account_type: user_credentials[0]?.account_type as TAccountType,
-    };
-
-    return userCredentials;
-}
-
-async function fetchFeedbackCredentials(
-    supabase: SupabaseClient,
-    feedbackID: number
-) {
-    const { data, error } = await supabase
-        .from("feedbacks")
-        .select("feedback_creator_uid, feedback_reference")
-        .eq("feedback_id", feedbackID);
-
-    if (error) throw error;
-
-    const feedbackCredentials = {
-        feedback_creator_uid: data[0]?.feedback_creator_uid,
-        feedback_reference: data[0]?.feedback_reference,
-    };
-
-    return feedbackCredentials;
-}
-
-function getFeedbackIDValue(url: string) {
-    const urlParts = url.split("/");
-    const lastPart = urlParts.at(-1);
-    const idParam = lastPart?.split("?")[1];
-    const idValue = idParam?.split("=")[1];
-
-    return idValue;
 }

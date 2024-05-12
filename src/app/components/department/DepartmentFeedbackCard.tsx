@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
-
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import {
     getFormattedDate,
     getStatusBackgroundColor,
 } from "@/app/utils/helperUtils";
+
+import Link from "next/link";
 
 import { CiFlag1 } from "react-icons/ci";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";

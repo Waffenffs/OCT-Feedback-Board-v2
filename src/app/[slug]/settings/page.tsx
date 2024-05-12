@@ -1,6 +1,7 @@
 "use client";
 
 import { getAccountInfoWithUID, getUserInfo } from "@/app/utils/supabaseUtils";
+import { separateEmailLocalPark } from "@/app/utils/helperUtils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import PasswordSettings from "@/app/components/settings/PasswordSettings";
@@ -12,15 +13,12 @@ type TSettings = {
     account: TUser | null;
 };
 
-type TCurrentSetting = "Password" | "Account" | "FAQ";
-
 export default function Settings() {
     const [data, setData] = useState<TSettings>({
         user: null,
         account: null,
     });
-    const [currentSetting, setCurrentSetting] =
-        useState<TCurrentSetting>("Password");
+    const [loading, setLoading] = useState(true);
 
     const supabase = createClientComponentClient();
 
@@ -37,6 +35,8 @@ export default function Settings() {
                 user: user,
                 account: account,
             });
+
+            setLoading(false);
         };
 
         fetchSettingsData();
@@ -44,7 +44,7 @@ export default function Settings() {
 
     return (
         <div className='w-full h-full flex flex-col justify-center items-center'>
-            <main className='w-4/6'>
+            <main className='w-4/6 max-md:w-11/12'>
                 <header className='w-full bg-gradient-to-r from-green-500 via-lime-500 to-lime-500 rounded-full shadow py-4 px-7'>
                     <h1 className='text-5xl font-bold tracking-tight text-white'>
                         Settings
@@ -55,7 +55,15 @@ export default function Settings() {
                     </h1>
                 </header>
 
-                <PasswordSettings accountName={data?.account?.account_name} />
+                {data?.account && (
+                    <PasswordSettings
+                        accountName={
+                            data?.account?.account_username ||
+                            separateEmailLocalPark(data?.account?.account_name!)
+                        }
+                        loading={loading}
+                    />
+                )}
             </main>
         </div>
     );

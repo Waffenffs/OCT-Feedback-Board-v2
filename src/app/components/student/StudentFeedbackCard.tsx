@@ -74,7 +74,7 @@ export default function StudentFeedbackCard(props: TFeedback) {
 
                 <footer className='mt-8'>
                     {referredDepartmentName ? (
-                        <span className='tracking-wider text-sm text-slate-600 bg-neutral-200 py-1 px-3 rounded'>
+                        <span className='tracking-wider text-sm max-md:text-xs max-md:tracking-tight text-slate-600 bg-neutral-200 py-1 px-3 rounded'>
                             Regarding: {referredDepartmentName}
                         </span>
                     ) : (

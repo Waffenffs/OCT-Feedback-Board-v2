@@ -31,6 +31,7 @@ declare global {
         account_id: number;
         account_uid: string;
         account_name: string;
+        account_username?: string;
         account_type: TAccountType;
     };
 

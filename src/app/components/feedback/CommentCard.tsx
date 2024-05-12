@@ -1,6 +1,9 @@
 "use client";
 
-import { getFormattedDate } from "@/app/utils/helperUtils";
+import {
+    getFormattedDate,
+    separateEmailLocalPark,
+} from "@/app/utils/helperUtils";
 import { getAccountInfoWithUID } from "@/app/utils/supabaseUtils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -64,7 +67,11 @@ export default function CommentCard({
             <article className='rounded-md shadow border-2 flex flex-col p-2 justify-start bg-zinc-100'>
                 <div className='flex flex-row items-center justify-start w-full gap-2'>
                     <span className='font-semibold'>
-                        {commentorAccountInfo?.account_name}
+                        {commentorAccountInfo &&
+                            (commentorAccountInfo?.account_username ||
+                                separateEmailLocalPark(
+                                    commentorAccountInfo?.account_name
+                                ))}
                     </span>
 
                     <article className='rounded-md px-2 py-1 bg-zinc-300 border flex justify-center items-center text-center'>

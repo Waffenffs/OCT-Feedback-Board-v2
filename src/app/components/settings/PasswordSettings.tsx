@@ -5,13 +5,14 @@ import { useState } from "react";
 
 import { isValid } from "@/app/utils/helperUtils";
 
-import Tooltip from "../ui/Tooltip";
 import FormInput from "@/app/components/ui/FormInput";
 
 export default function PasswordSettings({
     accountName,
+    loading,
 }: {
     accountName: string | undefined;
+    loading: boolean;
 }) {
     const [changePassword, setChangePassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -78,11 +79,17 @@ export default function PasswordSettings({
             }}
             className='bg-white flex flex-col justify-start p-7 text-black mt-5 rounded shadow border w-full'
         >
-            <div className='mb-7'>
-                <span className='rounded-xl py-1 px-7 bg-neutral-300 text-zinc-700 tracking-wide font-semibold text-sm'>
-                    {accountName}
-                </span>
-            </div>
+            {loading ? (
+                <div className='h-6 bg-neutral-300 rounded-xl dark:bg-neutral-400 w-64 animate-pulse mb-7'></div>
+            ) : (
+                <>
+                    <div className='mb-7'>
+                        <span className='rounded-xl py-1 px-7 bg-neutral-300 text-zinc-700 tracking-wide font-semibold text-sm'>
+                            {accountName}
+                        </span>
+                    </div>
+                </>
+            )}
 
             <h1 className='text-xl tracking-wide font-semibold mb-5'>
                 Password
@@ -132,7 +139,8 @@ export default function PasswordSettings({
             <footer className='flex justify-end items-center w-full mt-5'>
                 <button
                     onClick={() => handleSubmit()}
-                    className={`${
+                    className={`
+                    ${
                         confirmPasswordChangePressCount === 1 || error
                             ? "bg-red-500 text-white border-red-500"
                             : "bg-white text-black border-black hover:bg-blue-500 hover:text-white hover:border-blue-400"
@@ -140,13 +148,12 @@ export default function PasswordSettings({
                     flex justify-center items-center text-center py-1 px-3 rounded shadow font-semibold border 
                     text-sm transition duration-150 tracking-tight`}
                 >
-                    {
-                        error
-                            ? "Error"
-                            : confirmPasswordChangePressCount === 0
-                            ? "Change"
-                            : "Confirm" // this is so cursed
-                    }
+                    {/* cursed */}
+                    {error
+                        ? "Error"
+                        : confirmPasswordChangePressCount === 0
+                        ? "Change"
+                        : "Confirm"}
                 </button>
             </footer>
         </form>

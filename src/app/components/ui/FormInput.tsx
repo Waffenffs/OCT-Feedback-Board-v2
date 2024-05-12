@@ -12,12 +12,14 @@ type TTooltipType = "password" | "email";
 
 type TFormInputProps = {
     title: string;
-    placeholder?: string;
-    tooltipType?: TTooltipType;
     type: "text" | "password" | "email";
-    mode?: TModes;
     value: string;
     name: string;
+
+    placeholder?: string;
+    tooltipType?: TTooltipType;
+    mode?: TModes;
+
     onChange: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -30,15 +32,20 @@ export default function FormInput(props: TFormInputProps) {
         email: "Email must match @olivarezcollegetagaytay.edu.ph",
     };
 
+    let title = "";
+    if (props.mode !== "login" && props.title === "Email / Username") {
+        title = "Email";
+    } else {
+        title = props.title;
+    }
+
     return (
         <div className='w-full flex flex-col gap-1 justify-start text-slate-800'>
             <div className='flex flex-row items-center gap-2'>
-                <h1 className='font-semibold text-sm'>{props.title}</h1>
-                {props.tooltipType &&
-                    (props.mode === "registration" ||
-                        props.mode === "department-registration") && (
-                        <Tooltip content={tooltipContent[props.tooltipType]} />
-                    )}
+                <h1 className='font-semibold text-sm'>{title}</h1>
+                {props.tooltipType !== undefined && props.mode !== "login" && (
+                    <Tooltip content={tooltipContent[props.tooltipType]} />
+                )}
             </div>
             <div className='relative flex flex-row items-center placeholder:text-sm mt-1 text-sm border-2 border-slate-300 rounded py-1 px-2 '>
                 <input
@@ -57,7 +64,7 @@ export default function FormInput(props: TFormInputProps) {
                             e.preventDefault();
                             setShowPassword((prevState) => !prevState);
                         }}
-                        className='absolute right-0 text-xl mr-3 transition duration-300'
+                        className='absolute right-0 text-xl mr-3 transition duration-300 bg-white'
                     >
                         {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                     </button>

@@ -4,18 +4,20 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 
 import NoContent from "@/app/components/ui/NoContent";
-import DepartmentFeedbackCard from "../components/department/DepartmentFeedbackCard";
-import StatusSection from "../components/department/StatusSection";
+import DepartmentFeedbackCard from "@/app/components/department/DepartmentFeedbackCard";
+import FeedbackStatusButton from "@/app/components/department/FeedbackStatusButton";
 
 import {
     getAccountInfoWithUID,
     getReferencedFeedbacks,
     getUserInfo,
-} from "../utils/supabaseUtils";
+} from "@/app/utils/supabaseUtils";
 
 export default function Department() {
     const [feedbacks, setFeedbacks] = useState<any | null>(null);
     const [refreshFeedbacks, setRefreshFeedbacks] = useState(false);
+    const [currentFeedbackStatus, setCurrentFeedbackStatus] =
+        useState<TFeedbackStatus>("Pending");
     const [loading, setLoading] = useState(true);
 
     const supabase = createClientComponentClient();
@@ -42,32 +44,21 @@ export default function Department() {
         setRefreshFeedbacks((prevState) => !prevState);
     };
 
-    const pendingFeedbacks = feedbacks
-        ?.filter((fb: any) => fb.feedback_status === "Pending")
-        .map((item: TFeedback, index: number) => {
-            return (
-                <DepartmentFeedbackCard
-                    key={index}
-                    feedback={item}
-                    refreshFeedback={refreshFeedback}
-                />
-            );
-        });
+    const pendingFeedbacks = feedbacks?.filter(
+        (fb: any) => fb.feedback_status === "Pending"
+    );
+    const resolvedFeedbacks = feedbacks?.filter(
+        (fb: any) => fb.feedback_status === "Resolved"
+    );
+    const flaggedFeedbacks = feedbacks?.filter(
+        (fb: any) => fb.feedback_status === "Flagged"
+    );
 
-    const resolvedFeedbacks = feedbacks
-        ?.filter((fb: any) => fb.feedback_status === "Resolved")
-        .map((item: TFeedback, index: number) => {
-            return (
-                <DepartmentFeedbackCard
-                    key={index}
-                    feedback={item}
-                    refreshFeedback={refreshFeedback}
-                />
-            );
-        });
-
-    const flaggedFeedbacks = feedbacks
-        ?.filter((fb: any) => fb.feedback_status === "Flagged")
+    const feedbackElements = feedbacks
+        ?.filter(
+            (feedback: any) =>
+                feedback.feedback_status === currentFeedbackStatus
+        )
         .map((item: TFeedback, index: number) => {
             return (
                 <DepartmentFeedbackCard
@@ -80,39 +71,48 @@ export default function Department() {
 
     return (
         <main className='w-full h-full p-10'>
-            <StatusSection
-                status='Pending'
-                feedbackCount={pendingFeedbacks?.length || 0}
-            />
-            <section className='flex flex-col gap-1 w-full'>
-                {pendingFeedbacks?.length >= 1 ? (
-                    pendingFeedbacks
+            <header className='flex flex-row items-center gap-10'>
+                {loading ? (
+                    <>
+                        <div className='h-16 bg-zinc-200 rounded-2xl dark:bg-zinc-400 w-40'></div>
+                        <div className='h-16 bg-zinc-200 rounded-2xl dark:bg-zinc-400 w-40'></div>
+                        <div className='h-16 bg-zinc-200 rounded-2xl dark:bg-zinc-400 w-40'></div>
+                    </>
                 ) : (
-                    <NoContent />
+                    <>
+                        <FeedbackStatusButton
+                            status='Pending'
+                            set={setCurrentFeedbackStatus}
+                            length={pendingFeedbacks?.length}
+                            activeStatus={currentFeedbackStatus}
+                        />
+                        <FeedbackStatusButton
+                            status='Resolved'
+                            set={setCurrentFeedbackStatus}
+                            length={resolvedFeedbacks?.length}
+                            activeStatus={currentFeedbackStatus}
+                        />
+                        <FeedbackStatusButton
+                            status='Flagged'
+                            set={setCurrentFeedbackStatus}
+                            length={flaggedFeedbacks?.length}
+                            activeStatus={currentFeedbackStatus}
+                        />
+                    </>
                 )}
-            </section>
+            </header>
+            <hr className='h-px mt-4 bg-gray-300 border-0 mb-5' />
 
-            <StatusSection
-                status='Resolved'
-                marginTop={10}
-                feedbackCount={resolvedFeedbacks?.length || 0}
-            />
             <section className='flex flex-col gap-1 w-full'>
-                {resolvedFeedbacks?.length >= 1 ? (
-                    resolvedFeedbacks
-                ) : (
-                    <NoContent />
+                {loading && (
+                    <section className='flex flex-col gap-2 animate-pulse'>
+                        <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                        <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                        <div className='h-36 bg-zinc-200 rounded dark:bg-zinc-400 w-full'></div>
+                    </section>
                 )}
-            </section>
-
-            <StatusSection
-                status='Flagged'
-                marginTop={10}
-                feedbackCount={flaggedFeedbacks?.length || 0}
-            />
-            <section className='flex flex-col gap-1 w-full mb-10'>
-                {flaggedFeedbacks?.length >= 1 ? (
-                    flaggedFeedbacks
+                {feedbackElements?.length !== 0 ? (
+                    feedbackElements
                 ) : (
                     <NoContent />
                 )}

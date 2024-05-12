@@ -62,3 +62,37 @@ export function isValid(arg: string, mode: "password" | "email") {
         return emailPattern.test(arg);
     }
 }
+
+/** Returns the values of an email before the '@' symbol */
+export function separateEmailLocalPark(email: string) {
+    let username = "";
+
+    for (let i = 0; i < email.length; i++) {
+        if (email.charAt(i) === "@") {
+            break;
+        }
+        username += email.charAt(i);
+    }
+
+    return username;
+}
+
+/** Returns whether a given text is an email or not. */
+export function isEmail(text: string) {
+    for (let i = 0; i < text.length; i++) {
+        if (text.charAt(i) === "@") {
+            return true;
+        }
+    }
+    return false;
+}
+
+/** Returns the ID of a given feedback URL */
+export function getFeedbackIDValue(url: string) {
+    const urlParts = url.split("/");
+    const lastPart = urlParts.at(-1);
+    const idParam = lastPart?.split("?")[1];
+    const idValue = idParam?.split("=")[1];
+
+    return idValue;
+}

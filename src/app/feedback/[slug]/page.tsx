@@ -15,7 +15,10 @@ import NoContent from "@/app/components/ui/NoContent";
 import PageFlag from "@/app/components/ui/PageFlag";
 import Link from "next/link";
 
-import { getFormattedDate } from "@/app/utils/helperUtils";
+import {
+    getFormattedDate,
+    separateEmailLocalPark,
+} from "@/app/utils/helperUtils";
 import {
     getAccountInfoWithID,
     getAccountInfoWithUID,
@@ -125,7 +128,7 @@ export default function Feedback() {
         ));
 
     return (
-        <div className='w-full h-full py-14 px-10 bg-white mt-5 text-slate-900 rounded-t-[4rem] shadow-2xl'>
+        <div className='w-full h-full py-14 px-10 bg-white mt-5 text-slate-900 rounded-t-[4rem] shadow-2xl max-md:overflow-auto'>
             <div className='flex justify-start'>
                 <Link
                     href={"/"}
@@ -136,11 +139,16 @@ export default function Feedback() {
                 </Link>
             </div>
 
-            <header className='w-full flex justify-between items-center text-slate-600 text-sm mt-5'>
+            <header className='w-full flex justify-between items-center text-slate-600 text-sm mt-5 max-md:text-xs'>
                 <section className='flex flex-row gap-1 items-end '>
                     <PiStudentLight className='text-2xl' />
                     <span className='font-semibold '>
-                        {pageData?.creator && pageData?.creator.account_name}
+                        {/* {pageData?.creator && pageData?.creator.account_name} */}
+                        {pageData?.creator &&
+                            (pageData?.creator.account_username ||
+                                separateEmailLocalPark(
+                                    pageData?.creator.account_name
+                                ))}
                     </span>
                 </section>
 

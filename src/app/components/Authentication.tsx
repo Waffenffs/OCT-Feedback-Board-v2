@@ -6,15 +6,18 @@ import { useState } from "react";
 
 import ChatBubbleSvg from "../../../public/chatbubble.svg";
 
-import { isValid } from "@/app/utils/helperUtils";
-
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 import Container from "./ui/Container";
 import FormInput from "./ui/FormInput";
 
-import Image from "next/image";
+import {
+    isValid,
+    isEmail,
+    separateEmailLocalPark,
+} from "@/app/utils/helperUtils";
 
 export type TModes = "login" | "registration" | "department-registration";
 
@@ -32,6 +35,10 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     // ------
     // olivarezmaintenance.olivarezcollegetagaytay.edu.ph@gmail.com
     // password: samplemaintenanceaccount
+
+    // # Student
+    // testingstudentaccount@olivarezcollegetagaytay.edu.ph
+    // Testing_123
 
     const [authEmail, setAuthEmail] = useState("");
     const [authPassword, setAuthPassword] = useState("");
@@ -64,10 +71,9 @@ export default function Authentication({ mode }: TAuthenticationProps) {
             //     emailRedirectTo: ''
             // }
         });
-        if (error) {
-            throw error;
-        }
+        if (error) console.error(error);
 
+        const username = separateEmailLocalPark(data.user?.email!);
         const { error: account_error } = await supabase
             .from("accounts")
             .insert([
@@ -75,6 +81,7 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     account_name: data.user?.email,
                     account_type: "Student",
                     account_uid: data.user?.id,
+                    account_username: username,
                 },
             ]);
         if (account_error) {
@@ -152,15 +159,33 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     const signIn = async () => {
         setLoading(true);
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email: authEmail,
-            password: authPassword,
-        });
+        if (isEmail(authEmail)) {
+            const { error } = await supabase.auth.signInWithPassword({
+                email: authEmail,
+                password: authPassword,
+            });
+
+            if (error) handleError();
+        } else {
+            const { data: userEmail, error } = await supabase
+                .from("accounts")
+                .select("account_name")
+                .eq("account_username", authEmail);
+            if (error) handleError();
+
+            if (!userEmail) {
+                handleError();
+            } else {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: userEmail[0].account_name,
+                    password: authPassword,
+                });
+
+                if (error) handleError();
+            }
+        }
 
         setLoading(false);
-
-        if (error) handleError();
-
         router.push("/");
     };
 
@@ -171,15 +196,18 @@ export default function Authentication({ mode }: TAuthenticationProps) {
     };
 
     return (
-        <Container stylings='flex'>
+        <Container
+            stylings='flex max-md:justify-center max-md:items-center max-md:bg-gradient-to-br from-lime-300 to-green-500 
+            overflow-auto'
+        >
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className='w-1/2 flex flex-col justify-center items-center bg-lime-200'
+                className='w-1/2 flex flex-col justify-center items-center bg-gradient-to-br from-lime-300 to-green-500 max-md:hidden'
             >
                 <Image src={ChatBubbleSvg} alt='SVG' width={500} height={500} />
-                <footer className='flex flex-col text-center mt-12 text-slate-800'>
+                <footer className='flex flex-col text-center mt-12 text-slate-200'>
                     <span className='font-semibold text-3xl italic'>
                         Empowering the Olivarian voice
                     </span>
@@ -194,10 +222,14 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                 transition={{ delay: 0.5 }}
                 action='/auth/callback'
                 onSubmit={(e) => e.preventDefault()}
-                className='flex flex-col justify-center items-center bg-white shadow-xl w-1/2 relative'
+                className='flex flex-col justify-center items-center bg-white shadow-xl w-1/2 relative max-md:rounded-2xl max-md:w-full 
+                max-md:py-24'
             >
                 <header className='w-full flex flex-row justify-center items-center gap-2 pt-5 rounded-t text-sm font-semibold'>
-                    <div className='flex flex-row items-center text-center gap-2 bg-gradient-to-br from-green-500 to-lime-400  rounded-md text-white'>
+                    <div
+                        className='flex flex-row items-center text-center gap-2 bg-gradient-to-br from-green-500 to-lime-400  rounded-md 
+                        text-white'
+                    >
                         <h1 className='text-green-500 bg-white px-3 py-1 rounded-md border'>
                             Oliv
                         </h1>
@@ -221,10 +253,10 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     <FormInput
                         tooltipType='email'
                         mode={mode}
-                        title='Email'
+                        title='Email / Username'
                         placeholder=''
-                        type='email'
-                        name='email'
+                        type='text'
+                        name='email-username'
                         value={authEmail}
                         onChange={setAuthEmail}
                     />
@@ -256,14 +288,18 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                     <button
                         onClick={() => authActions[mode]()}
                         disabled={loading}
-                        className={`font-semibold rounded ${
+                        className={`
+                        ${
                             loading
                                 ? "bg-green-700 text-slate-200 border-green-400"
                                 : "bg-green-500"
-                        } ${
+                        } 
+                        ${
                             authError &&
                             "bg-red-500 border-red-400 hover:bg-red-600"
-                        } hover:bg-green-700 hover:text-slate-200 border-2 rounded-full border-green-500 transition ease-in-out duration-300 text-center w-full py-2 mt-16`}
+                        } 
+                        font-semibold rounded hover:bg-green-700 hover:text-slate-200 border-2 rounded-full border-green-500 transition 
+                        ease-in-out duration-300 text-center w-full py-2 mt-16`}
                     >
                         {mode === "login" ? "Login" : "Register"}
                     </button>

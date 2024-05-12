@@ -10,7 +10,7 @@ import FilterMenu from "../components/ui/FilterMenu";
 import { getUserInfo } from "@/app/utils/supabaseUtils";
 
 export default function Student() {
-    const [feedbacks, setFeedbacks] = useState<any | null>(null);
+    const [feedbacks, setFeedbacks] = useState<TFeedback[] | null>(null);
     const [isActiveFilterMenu, setIsActiveFilterMenu] = useState(false);
     const [activeCategory, setActiveCategory] =
         useState<TFeedbackStatusWithAll>("All");
@@ -104,6 +104,20 @@ export default function Student() {
         fetchData();
     };
 
+    const studentFeedbackCards = feedbacks?.map((feedback, index) => (
+        <StudentFeedbackCard
+            key={index}
+            feedback_id={feedback.feedback_id}
+            feedback_title={feedback.feedback_title}
+            feedback_description={feedback.feedback_description}
+            feedback_status={feedback.feedback_status}
+            feedback_created_at={feedback.feedback_created_at}
+            feedback_reference={feedback.feedback_reference}
+            feedback_creator_uid={feedback.feedback_creator_uid}
+            last_reviewed_at={null}
+        />
+    ));
+
     const studentFeedbacksExist = feedbacks && feedbacks?.length >= 1;
 
     if (isLoading)
@@ -124,22 +138,6 @@ export default function Student() {
                 </section>
             </main>
         );
-
-    const studentFeedbackCards = feedbacks?.map(
-        (feedback: TFeedback, index: number) => (
-            <StudentFeedbackCard
-                key={index}
-                feedback_id={feedback.feedback_id}
-                feedback_title={feedback.feedback_title}
-                feedback_description={feedback.feedback_description}
-                feedback_status={feedback.feedback_status}
-                feedback_created_at={feedback.feedback_created_at}
-                feedback_reference={feedback.feedback_reference}
-                feedback_creator_uid={feedback.feedback_creator_uid}
-                last_reviewed_at={null}
-            />
-        )
-    );
 
     return (
         <main className='w-full h-full p-10 overflow-x-hidden overflow-y-auto flex flex-col gap-8'>
