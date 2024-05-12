@@ -71,7 +71,7 @@ export default function Department() {
 
     return (
         <main className='w-full h-full p-10'>
-            <header className='flex flex-row items-center gap-10'>
+            <header className='flex flex-row items-center gap-10 max-md:gap-2'>
                 {loading ? (
                     <>
                         <div className='h-16 bg-zinc-200 rounded-2xl dark:bg-zinc-400 w-40'></div>

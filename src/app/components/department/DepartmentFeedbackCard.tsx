@@ -45,7 +45,7 @@ export default function DepartmentFeedbackCard({
 
     return (
         <article className='flex flex-row gap-3 text-slate-800 tracking-wide p-5 bg-white shadow rounded-md'>
-            <div className='h-4 w-6 pt-1 relative'>
+            <div className='w-6 pt-1 relative'>
                 <div
                     className={`group cursor-default rounded shadow ${statusBackgroundColor}`}
                 >
