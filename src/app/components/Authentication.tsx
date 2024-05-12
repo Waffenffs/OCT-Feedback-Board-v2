@@ -298,8 +298,9 @@ export default function Authentication({ mode }: TAuthenticationProps) {
                             authError &&
                             "bg-red-500 border-red-400 hover:bg-red-600"
                         } 
-                        font-semibold rounded hover:bg-green-700 hover:text-slate-200 border-2 rounded-full border-green-500 transition 
-                        ease-in-out duration-300 text-center w-full py-2 mt-16`}
+
+                        text-white font-semibold rounded hover:bg-green-700 hover:text-slate-200 border-2 rounded-full border-green-500 
+                        transition ease-in-out duration-300 text-center w-full py-2 mt-16`}
                     >
                         {mode === "login" ? "Login" : "Register"}
                     </button>
